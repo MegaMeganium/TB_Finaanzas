@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BonoCorpAlemanModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bono">
+          <Key>
+            <PropertyRef Name="BonoID" />
+          </Key>
+          <Property Name="BonoID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Entidad_ID" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ValorNominal" Type="int" Nullable="false" />
+          <Property Name="ValorComercial" Type="int" Nullable="false" />
+          <Property Name="NroAnios" Type="int" Nullable="false" />
+          <Property Name="FrecCupon" Type="int" Nullable="false" />
+          <Property Name="DiasPorAnio" Type="int" Nullable="false" />
+          <Property Name="TipoTasa" Type="int" Nullable="false" />
+          <Property Name="Capitalizacion" Type="int" Nullable="false" />
+          <Property Name="TasaInteres" Type="int" Nullable="false" />
+          <Property Name="TasaAnualDesc" Type="int" Nullable="false" />
+          <Property Name="ImpuestoRenta" Type="int" Nullable="false" />
+          <Property Name="FechaEmision" Type="date" Nullable="false" />
+          <Property Name="Inflacion" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Capitalizacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Costes_Gastos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bono_ID" Type="bigint" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Valor" Type="int" Nullable="false" />
+          <Property Name="Inicial" Type="bit" Nullable="false" />
+          <Property Name="Emisor" Type="bit" Nullable="false" />
+          <Property Name="Receptor" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Entidad">
+          <Key>
+            <PropertyRef Name="ID_email" />
+          </Key>
+          <Property Name="ID_email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="8" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellido" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Inflacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bono_ID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlazoBono">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bono_ID" Type="bigint" Nullable="false" />
+          <Property Name="PlazoGracia_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PlazoGracia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Descripcion" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TipoTasa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <Association Name="Bono_Capitalizacion">
+          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitalizacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="Capitalizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID_email" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="Entidad_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Tasa">
+          <End Role="TipoTasa" Type="Self.TipoTasa" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTasa">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="TipoTasa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Costes_Gastos_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Costes_Gastos" Type="Self.Costes_Gastos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="Costes_Gastos">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Inflacion_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Inflacion" Type="Self.Inflacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="Inflacion">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlazoBono_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="PlazoBono" Type="Self.PlazoBono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="PlazoBono">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlazoBono_PlazoGracia">
+          <End Role="PlazoGracia" Type="Self.PlazoGracia" Multiplicity="1" />
+          <End Role="PlazoBono" Type="Self.PlazoBono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PlazoGracia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PlazoBono">
+              <PropertyRef Name="PlazoGracia_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BonoCorpAlemanModelStoreContainer">
+          <EntitySet Name="Bono" EntityType="Self.Bono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Capitalizacion" EntityType="Self.Capitalizacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Costes_Gastos" EntityType="Self.Costes_Gastos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Entidad" EntityType="Self.Entidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inflacion" EntityType="Self.Inflacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlazoBono" EntityType="Self.PlazoBono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlazoGracia" EntityType="Self.PlazoGracia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoTasa" EntityType="Self.TipoTasa" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="Bono_Capitalizacion" Association="Self.Bono_Capitalizacion">
+            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Entidad" Association="Self.Bono_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa" Association="Self.Bono_Tasa">
+            <End Role="TipoTasa" EntitySet="TipoTasa" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Costes_Gastos_Bono" Association="Self.Costes_Gastos_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="Costes_Gastos" EntitySet="Costes_Gastos" />
+          </AssociationSet>
+          <AssociationSet Name="Inflacion_Bono" Association="Self.Inflacion_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="Inflacion" EntitySet="Inflacion" />
+          </AssociationSet>
+          <AssociationSet Name="PlazoBono_Bono" Association="Self.PlazoBono_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="PlazoBono" EntitySet="PlazoBono" />
+          </AssociationSet>
+          <AssociationSet Name="PlazoBono_PlazoGracia" Association="Self.PlazoBono_PlazoGracia">
+            <End Role="PlazoGracia" EntitySet="PlazoGracia" />
+            <End Role="PlazoBono" EntitySet="PlazoBono" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BonoCorpAlemanModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bono">
+          <Key>
+            <PropertyRef Name="BonoID" />
+          </Key>
+          <Property Name="BonoID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Entidad_ID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ValorNominal" Type="Int32" Nullable="false" />
+          <Property Name="ValorComercial" Type="Int32" Nullable="false" />
+          <Property Name="NroAnios" Type="Int32" Nullable="false" />
+          <Property Name="FrecCupon" Type="Int32" Nullable="false" />
+          <Property Name="DiasPorAnio" Type="Int32" Nullable="false" />
+          <Property Name="TipoTasa" Type="Int32" Nullable="false" />
+          <Property Name="Capitalizacion" Type="Int32" Nullable="false" />
+          <Property Name="TasaInteres" Type="Int32" Nullable="false" />
+          <Property Name="TasaAnualDesc" Type="Int32" Nullable="false" />
+          <Property Name="ImpuestoRenta" Type="Int32" Nullable="false" />
+          <Property Name="FechaEmision" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Inflacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Capitalizacion1" Relationship="Self.Bono_Capitalizacion" FromRole="Bono" ToRole="Capitalizacion" />
+          <NavigationProperty Name="Entidad" Relationship="Self.Bono_Entidad" FromRole="Bono" ToRole="Entidad" />
+          <NavigationProperty Name="TipoTasa1" Relationship="Self.Bono_Tasa" FromRole="Bono" ToRole="TipoTasa" />
+          <NavigationProperty Name="Costes_Gastos" Relationship="Self.Costes_Gastos_Bono" FromRole="Bono" ToRole="Costes_Gastos" />
+          <NavigationProperty Name="Inflacion1" Relationship="Self.Inflacion_Bono" FromRole="Bono" ToRole="Inflacion" />
+          <NavigationProperty Name="PlazoBono" Relationship="Self.PlazoBono_Bono" FromRole="Bono" ToRole="PlazoBono" />
+        </EntityType>
+        <EntityType Name="Capitalizacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.Bono_Capitalizacion" FromRole="Capitalizacion" ToRole="Bono" />
+        </EntityType>
+        <EntityType Name="Costes_Gastos">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bono_ID" Type="Int64" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Valor" Type="Int32" Nullable="false" />
+          <Property Name="Inicial" Type="Boolean" Nullable="false" />
+          <Property Name="Emisor" Type="Boolean" Nullable="false" />
+          <Property Name="Receptor" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.Costes_Gastos_Bono" FromRole="Costes_Gastos" ToRole="Bono" />
+        </EntityType>
+        <EntityType Name="Entidad">
+          <Key>
+            <PropertyRef Name="ID_email" />
+          </Key>
+          <Property Name="ID_email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="8" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.Bono_Entidad" FromRole="Entidad" ToRole="Bono" />
+        </EntityType>
+        <EntityType Name="Inflacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bono_ID" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.Inflacion_Bono" FromRole="Inflacion" ToRole="Bono" />
+        </EntityType>
+        <EntityType Name="PlazoBono">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bono_ID" Type="Int64" Nullable="false" />
+          <Property Name="PlazoGracia_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.PlazoBono_Bono" FromRole="PlazoBono" ToRole="Bono" />
+          <NavigationProperty Name="PlazoGracia" Relationship="Self.PlazoBono_PlazoGracia" FromRole="PlazoBono" ToRole="PlazoGracia" />
+        </EntityType>
+        <EntityType Name="PlazoGracia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PlazoBono" Relationship="Self.PlazoBono_PlazoGracia" FromRole="PlazoGracia" ToRole="PlazoBono" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TipoTasa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bono" Relationship="Self.Bono_Tasa" FromRole="TipoTasa" ToRole="Bono" />
+        </EntityType>
+        <Association Name="Bono_Capitalizacion">
+          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitalizacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="Capitalizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID_email" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="Entidad_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Tasa">
+          <End Role="TipoTasa" Type="Self.TipoTasa" Multiplicity="1" />
+          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTasa">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono">
+              <PropertyRef Name="TipoTasa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Costes_Gastos_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Costes_Gastos" Type="Self.Costes_Gastos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="Costes_Gastos">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Inflacion_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Inflacion" Type="Self.Inflacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="Inflacion">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlazoBono_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="PlazoBono" Type="Self.PlazoBono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="PlazoBono">
+              <PropertyRef Name="Bono_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlazoBono_PlazoGracia">
+          <End Role="PlazoGracia" Type="Self.PlazoGracia" Multiplicity="1" />
+          <End Role="PlazoBono" Type="Self.PlazoBono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PlazoGracia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PlazoBono">
+              <PropertyRef Name="PlazoGracia_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BonoCorpAlemanEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bono" EntityType="Self.Bono" />
+          <EntitySet Name="Capitalizacion" EntityType="Self.Capitalizacion" />
+          <EntitySet Name="Costes_Gastos" EntityType="Self.Costes_Gastos" />
+          <EntitySet Name="Entidad" EntityType="Self.Entidad" />
+          <EntitySet Name="Inflacion" EntityType="Self.Inflacion" />
+          <EntitySet Name="PlazoBono" EntityType="Self.PlazoBono" />
+          <EntitySet Name="PlazoGracia" EntityType="Self.PlazoGracia" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="TipoTasa" EntityType="Self.TipoTasa" />
+          <AssociationSet Name="Bono_Capitalizacion" Association="Self.Bono_Capitalizacion">
+            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Entidad" Association="Self.Bono_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa" Association="Self.Bono_Tasa">
+            <End Role="TipoTasa" EntitySet="TipoTasa" />
+            <End Role="Bono" EntitySet="Bono" />
+          </AssociationSet>
+          <AssociationSet Name="Costes_Gastos_Bono" Association="Self.Costes_Gastos_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="Costes_Gastos" EntitySet="Costes_Gastos" />
+          </AssociationSet>
+          <AssociationSet Name="Inflacion_Bono" Association="Self.Inflacion_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="Inflacion" EntitySet="Inflacion" />
+          </AssociationSet>
+          <AssociationSet Name="PlazoBono_Bono" Association="Self.PlazoBono_Bono">
+            <End Role="Bono" EntitySet="Bono" />
+            <End Role="PlazoBono" EntitySet="PlazoBono" />
+          </AssociationSet>
+          <AssociationSet Name="PlazoBono_PlazoGracia" Association="Self.PlazoBono_PlazoGracia">
+            <End Role="PlazoGracia" EntitySet="PlazoGracia" />
+            <End Role="PlazoBono" EntitySet="PlazoBono" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BonoCorpAlemanModelStoreContainer" CdmEntityContainer="BonoCorpAlemanEntities">
+          <EntitySetMapping Name="Bono">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Bono">
+              <MappingFragment StoreEntitySet="Bono">
+                <ScalarProperty Name="BonoID" ColumnName="BonoID" />
+                <ScalarProperty Name="Entidad_ID" ColumnName="Entidad_ID" />
+                <ScalarProperty Name="ValorNominal" ColumnName="ValorNominal" />
+                <ScalarProperty Name="ValorComercial" ColumnName="ValorComercial" />
+                <ScalarProperty Name="NroAnios" ColumnName="NroAnios" />
+                <ScalarProperty Name="FrecCupon" ColumnName="FrecCupon" />
+                <ScalarProperty Name="DiasPorAnio" ColumnName="DiasPorAnio" />
+                <ScalarProperty Name="TipoTasa" ColumnName="TipoTasa" />
+                <ScalarProperty Name="Capitalizacion" ColumnName="Capitalizacion" />
+                <ScalarProperty Name="TasaInteres" ColumnName="TasaInteres" />
+                <ScalarProperty Name="TasaAnualDesc" ColumnName="TasaAnualDesc" />
+                <ScalarProperty Name="ImpuestoRenta" ColumnName="ImpuestoRenta" />
+                <ScalarProperty Name="FechaEmision" ColumnName="FechaEmision" />
+                <ScalarProperty Name="Inflacion" ColumnName="Inflacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Capitalizacion">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Capitalizacion">
+              <MappingFragment StoreEntitySet="Capitalizacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Costes_Gastos">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Costes_Gastos">
+              <MappingFragment StoreEntitySet="Costes_Gastos">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Bono_ID" ColumnName="Bono_ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Inicial" ColumnName="Inicial" />
+                <ScalarProperty Name="Emisor" ColumnName="Emisor" />
+                <ScalarProperty Name="Receptor" ColumnName="Receptor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entidad">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Entidad">
+              <MappingFragment StoreEntitySet="Entidad">
+                <ScalarProperty Name="ID_email" ColumnName="ID_email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inflacion">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Inflacion">
+              <MappingFragment StoreEntitySet="Inflacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Bono_ID" ColumnName="Bono_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlazoBono">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.PlazoBono">
+              <MappingFragment StoreEntitySet="PlazoBono">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Bono_ID" ColumnName="Bono_ID" />
+                <ScalarProperty Name="PlazoGracia_ID" ColumnName="PlazoGracia_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlazoGracia">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.PlazoGracia">
+              <MappingFragment StoreEntitySet="PlazoGracia">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoTasa">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.TipoTasa">
+              <MappingFragment StoreEntitySet="TipoTasa">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
