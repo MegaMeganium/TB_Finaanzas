@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Data.Entity;
@@ -26,6 +26,7 @@ namespace BonoCorpAleman
         }
     
         public virtual DbSet<Bono> Bono { get; set; }
+        public virtual DbSet<Bono_Tasa> Bono_Tasa { get; set; }
         public virtual DbSet<Capitalizacion> Capitalizacion { get; set; }
         public virtual DbSet<Costes_Gastos> Costes_Gastos { get; set; }
         public virtual DbSet<Entidad> Entidad { get; set; }

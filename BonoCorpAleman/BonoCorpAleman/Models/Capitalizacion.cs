@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,13 +17,13 @@ namespace BonoCorpAleman
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Capitalizacion()
         {
-            this.Bono = new HashSet<Bono>();
+            this.Bono_Tasa = new HashSet<Bono_Tasa>();
         }
     
         public int ID { get; set; }
         public string Nombre { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Bono> Bono { get; set; }
+        public virtual ICollection<Bono_Tasa> Bono_Tasa { get; set; }
     }
 }

@@ -7,16 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;
     
     public partial class PlazoBono
     {
-        public long ID { get; set; }
+        public int ID { get; set; }
         public long Bono_ID { get; set; }
         public int PlazoGracia_ID { get; set; }
+        public System.DateTime Fecha { get; set; }
     
         public virtual Bono Bono { get; set; }
         public virtual PlazoGracia PlazoGracia { get; set; }

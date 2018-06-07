@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace BonoCorpAleman
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Bono()
         {
+            this.Bono_Tasa = new HashSet<Bono_Tasa>();
             this.Costes_Gastos = new HashSet<Costes_Gastos>();
             this.Inflacion1 = new HashSet<Inflacion>();
             this.PlazoBono = new HashSet<PlazoBono>();
@@ -24,22 +25,19 @@ namespace BonoCorpAleman
     
         public long BonoID { get; set; }
         public string Entidad_ID { get; set; }
-        public int ValorNominal { get; set; }
+        public decimal ValorNominal { get; set; }
         public int ValorComercial { get; set; }
         public int NroAnios { get; set; }
         public int FrecCupon { get; set; }
         public int DiasPorAnio { get; set; }
-        public int TipoTasa { get; set; }
-        public int Capitalizacion { get; set; }
-        public int TasaInteres { get; set; }
-        public int TasaAnualDesc { get; set; }
-        public int ImpuestoRenta { get; set; }
+        public int ImpRenta { get; set; }
         public System.DateTime FechaEmision { get; set; }
-        public int Inflacion { get; set; }
+        public int TasaAnualDescuento { get; set; }
+        public Nullable<int> Inflacion { get; set; }
     
-        public virtual Capitalizacion Capitalizacion1 { get; set; }
         public virtual Entidad Entidad { get; set; }
-        public virtual TipoTasa TipoTasa1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bono_Tasa> Bono_Tasa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Costes_Gastos> Costes_Gastos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

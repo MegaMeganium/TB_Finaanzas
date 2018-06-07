@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;

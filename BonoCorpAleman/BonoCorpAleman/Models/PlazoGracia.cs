@@ -7,21 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Costes_Gastos
+    public partial class PlazoGracia
     {
-        public int ID { get; set; }
-        public long Bono_ID { get; set; }
-        public string Nombre { get; set; }
-        public int Valor { get; set; }
-        public bool Inicial { get; set; }
-        public bool Emisor { get; set; }
-        public bool Receptor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PlazoGracia()
+        {
+            this.PlazoBono = new HashSet<PlazoBono>();
+        }
     
-        public virtual Bono Bono { get; set; }
+        public int ID { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlazoBono> PlazoBono { get; set; }
     }
 }

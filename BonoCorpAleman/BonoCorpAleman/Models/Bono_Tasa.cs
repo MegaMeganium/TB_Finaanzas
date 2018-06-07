@@ -7,23 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BonoCorpAleman
+namespace BonoCorpAleman.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class TipoTasa
+    public partial class Bono_Tasa
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TipoTasa()
-        {
-            this.Bono = new HashSet<Bono>();
-        }
-    
         public int ID { get; set; }
-        public string Nombre { get; set; }
+        public int TipoTasa_ID { get; set; }
+        public long Bono_BonoID { get; set; }
+        public int TasaInteres { get; set; }
+        public int NroCuota { get; set; }
+        public Nullable<int> capitalizacion { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Bono> Bono { get; set; }
+        public virtual Bono Bono { get; set; }
+        public virtual Capitalizacion Capitalizacion1 { get; set; }
+        public virtual TipoTasa TipoTasa { get; set; }
     }
 }

@@ -11,18 +11,26 @@
           </Key>
           <Property Name="BonoID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Entidad_ID" Type="nvarchar" MaxLength="30" Nullable="false" />
-          <Property Name="ValorNominal" Type="int" Nullable="false" />
+          <Property Name="ValorNominal" Type="money" Nullable="false" />
           <Property Name="ValorComercial" Type="int" Nullable="false" />
           <Property Name="NroAnios" Type="int" Nullable="false" />
           <Property Name="FrecCupon" Type="int" Nullable="false" />
           <Property Name="DiasPorAnio" Type="int" Nullable="false" />
-          <Property Name="TipoTasa" Type="int" Nullable="false" />
-          <Property Name="Capitalizacion" Type="int" Nullable="false" />
-          <Property Name="TasaInteres" Type="int" Nullable="false" />
-          <Property Name="TasaAnualDesc" Type="int" Nullable="false" />
-          <Property Name="ImpuestoRenta" Type="int" Nullable="false" />
+          <Property Name="ImpRenta" Type="int" Nullable="false" />
           <Property Name="FechaEmision" Type="date" Nullable="false" />
-          <Property Name="Inflacion" Type="int" Nullable="false" />
+          <Property Name="TasaAnualDescuento" Type="int" Nullable="false" />
+          <Property Name="Inflacion" Type="int" />
+        </EntityType>
+        <EntityType Name="Bono_Tasa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TipoTasa_ID" Type="int" Nullable="false" />
+          <Property Name="Bono_BonoID" Type="bigint" Nullable="false" />
+          <Property Name="TasaInteres" Type="int" Nullable="false" />
+          <Property Name="NroCuota" Type="int" Nullable="false" />
+          <Property Name="capitalizacion" Type="int" />
         </EntityType>
         <EntityType Name="Capitalizacion">
           <Key>
@@ -58,14 +66,16 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Bono_ID" Type="bigint" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="PlazoBono">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Bono_ID" Type="bigint" Nullable="false" />
           <Property Name="PlazoGracia_ID" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="PlazoGracia">
           <Key>
@@ -73,7 +83,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
-          <Property Name="Descripcion" Type="text" Nullable="false" />
+          <Property Name="Descripcion" Type="text" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -92,18 +102,6 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="15" Nullable="false" />
         </EntityType>
-        <Association Name="Bono_Capitalizacion">
-          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="1" />
-          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Capitalizacion">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Bono">
-              <PropertyRef Name="Capitalizacion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Bono_Entidad">
           <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
           <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
@@ -116,15 +114,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Bono_Tasa">
+        <Association Name="Bono_Tasa_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
+            </Principal>
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="Bono_BonoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Tasa_Capitalizacion">
+          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="0..1" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitalizacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="capitalizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Tasa_TipoTasa">
           <End Role="TipoTasa" Type="Self.TipoTasa" Multiplicity="1" />
-          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoTasa">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="Bono">
-              <PropertyRef Name="TipoTasa" />
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="TipoTasa_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -178,6 +200,7 @@
         </Association>
         <EntityContainer Name="BonoCorpAlemanModelStoreContainer">
           <EntitySet Name="Bono" EntityType="Self.Bono" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bono_Tasa" EntityType="Self.Bono_Tasa" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Capitalizacion" EntityType="Self.Capitalizacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costes_Gastos" EntityType="Self.Costes_Gastos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Entidad" EntityType="Self.Entidad" Schema="dbo" store:Type="Tables" />
@@ -186,17 +209,21 @@
           <EntitySet Name="PlazoGracia" EntityType="Self.PlazoGracia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoTasa" EntityType="Self.TipoTasa" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="Bono_Capitalizacion" Association="Self.Bono_Capitalizacion">
-            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
-            <End Role="Bono" EntitySet="Bono" />
-          </AssociationSet>
           <AssociationSet Name="Bono_Entidad" Association="Self.Bono_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Bono" EntitySet="Bono" />
           </AssociationSet>
-          <AssociationSet Name="Bono_Tasa" Association="Self.Bono_Tasa">
-            <End Role="TipoTasa" EntitySet="TipoTasa" />
+          <AssociationSet Name="Bono_Tasa_Bono" Association="Self.Bono_Tasa_Bono">
             <End Role="Bono" EntitySet="Bono" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa_Capitalizacion" Association="Self.Bono_Tasa_Capitalizacion">
+            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa_TipoTasa" Association="Self.Bono_Tasa_TipoTasa">
+            <End Role="TipoTasa" EntitySet="TipoTasa" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
           </AssociationSet>
           <AssociationSet Name="Costes_Gastos_Bono" Association="Self.Costes_Gastos_Bono">
             <End Role="Bono" EntitySet="Bono" />
@@ -226,24 +253,34 @@
           </Key>
           <Property Name="BonoID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Entidad_ID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ValorNominal" Type="Int32" Nullable="false" />
+          <Property Name="ValorNominal" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="ValorComercial" Type="Int32" Nullable="false" />
           <Property Name="NroAnios" Type="Int32" Nullable="false" />
           <Property Name="FrecCupon" Type="Int32" Nullable="false" />
           <Property Name="DiasPorAnio" Type="Int32" Nullable="false" />
-          <Property Name="TipoTasa" Type="Int32" Nullable="false" />
-          <Property Name="Capitalizacion" Type="Int32" Nullable="false" />
-          <Property Name="TasaInteres" Type="Int32" Nullable="false" />
-          <Property Name="TasaAnualDesc" Type="Int32" Nullable="false" />
-          <Property Name="ImpuestoRenta" Type="Int32" Nullable="false" />
+          <Property Name="ImpRenta" Type="Int32" Nullable="false" />
           <Property Name="FechaEmision" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Inflacion" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Capitalizacion1" Relationship="Self.Bono_Capitalizacion" FromRole="Bono" ToRole="Capitalizacion" />
+          <Property Name="TasaAnualDescuento" Type="Int32" Nullable="false" />
+          <Property Name="Inflacion" Type="Int32" />
           <NavigationProperty Name="Entidad" Relationship="Self.Bono_Entidad" FromRole="Bono" ToRole="Entidad" />
-          <NavigationProperty Name="TipoTasa1" Relationship="Self.Bono_Tasa" FromRole="Bono" ToRole="TipoTasa" />
+          <NavigationProperty Name="Bono_Tasa" Relationship="Self.Bono_Tasa_Bono" FromRole="Bono" ToRole="Bono_Tasa" />
           <NavigationProperty Name="Costes_Gastos" Relationship="Self.Costes_Gastos_Bono" FromRole="Bono" ToRole="Costes_Gastos" />
           <NavigationProperty Name="Inflacion1" Relationship="Self.Inflacion_Bono" FromRole="Bono" ToRole="Inflacion" />
           <NavigationProperty Name="PlazoBono" Relationship="Self.PlazoBono_Bono" FromRole="Bono" ToRole="PlazoBono" />
+        </EntityType>
+        <EntityType Name="Bono_Tasa">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TipoTasa_ID" Type="Int32" Nullable="false" />
+          <Property Name="Bono_BonoID" Type="Int64" Nullable="false" />
+          <Property Name="TasaInteres" Type="Int32" Nullable="false" />
+          <Property Name="NroCuota" Type="Int32" Nullable="false" />
+          <Property Name="capitalizacion" Type="Int32" />
+          <NavigationProperty Name="Bono" Relationship="Self.Bono_Tasa_Bono" FromRole="Bono_Tasa" ToRole="Bono" />
+          <NavigationProperty Name="Capitalizacion1" Relationship="Self.Bono_Tasa_Capitalizacion" FromRole="Bono_Tasa" ToRole="Capitalizacion" />
+          <NavigationProperty Name="TipoTasa" Relationship="Self.Bono_Tasa_TipoTasa" FromRole="Bono_Tasa" ToRole="TipoTasa" />
         </EntityType>
         <EntityType Name="Capitalizacion">
           <Key>
@@ -251,7 +288,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Bono" Relationship="Self.Bono_Capitalizacion" FromRole="Capitalizacion" ToRole="Bono" />
+          <NavigationProperty Name="Bono_Tasa" Relationship="Self.Bono_Tasa_Capitalizacion" FromRole="Capitalizacion" ToRole="Bono_Tasa" />
         </EntityType>
         <EntityType Name="Costes_Gastos">
           <Key>
@@ -282,15 +319,17 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Bono_ID" Type="Int64" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Bono" Relationship="Self.Inflacion_Bono" FromRole="Inflacion" ToRole="Bono" />
         </EntityType>
         <EntityType Name="PlazoBono">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Bono_ID" Type="Int64" Nullable="false" />
           <Property Name="PlazoGracia_ID" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Bono" Relationship="Self.PlazoBono_Bono" FromRole="PlazoBono" ToRole="Bono" />
           <NavigationProperty Name="PlazoGracia" Relationship="Self.PlazoBono_PlazoGracia" FromRole="PlazoBono" ToRole="PlazoGracia" />
         </EntityType>
@@ -300,7 +339,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="PlazoBono" Relationship="Self.PlazoBono_PlazoGracia" FromRole="PlazoGracia" ToRole="PlazoBono" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -319,20 +358,8 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Bono" Relationship="Self.Bono_Tasa" FromRole="TipoTasa" ToRole="Bono" />
+          <NavigationProperty Name="Bono_Tasa" Relationship="Self.Bono_Tasa_TipoTasa" FromRole="TipoTasa" ToRole="Bono_Tasa" />
         </EntityType>
-        <Association Name="Bono_Capitalizacion">
-          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="1" />
-          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Capitalizacion">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Bono">
-              <PropertyRef Name="Capitalizacion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Bono_Entidad">
           <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
           <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
@@ -345,15 +372,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Bono_Tasa">
-          <End Role="TipoTasa" Type="Self.TipoTasa" Multiplicity="1" />
-          <End Role="Bono" Type="Self.Bono" Multiplicity="*" />
+        <Association Name="Bono_Tasa_Bono">
+          <End Role="Bono" Type="Self.Bono" Multiplicity="1" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="TipoTasa">
-              <PropertyRef Name="ID" />
+            <Principal Role="Bono">
+              <PropertyRef Name="BonoID" />
             </Principal>
-            <Dependent Role="Bono">
-              <PropertyRef Name="TipoTasa" />
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="Bono_BonoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -393,6 +420,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Bono_Tasa_Capitalizacion">
+          <End Role="Capitalizacion" Type="Self.Capitalizacion" Multiplicity="0..1" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Capitalizacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="capitalizacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Bono_Tasa_TipoTasa">
+          <End Role="TipoTasa" Type="Self.TipoTasa" Multiplicity="1" />
+          <End Role="Bono_Tasa" Type="Self.Bono_Tasa" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTasa">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bono_Tasa">
+              <PropertyRef Name="TipoTasa_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PlazoBono_PlazoGracia">
           <End Role="PlazoGracia" Type="Self.PlazoGracia" Multiplicity="1" />
           <End Role="PlazoBono" Type="Self.PlazoBono" Multiplicity="*" />
@@ -407,6 +458,7 @@
         </Association>
         <EntityContainer Name="BonoCorpAlemanEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bono" EntityType="Self.Bono" />
+          <EntitySet Name="Bono_Tasa" EntityType="Self.Bono_Tasa" />
           <EntitySet Name="Capitalizacion" EntityType="Self.Capitalizacion" />
           <EntitySet Name="Costes_Gastos" EntityType="Self.Costes_Gastos" />
           <EntitySet Name="Entidad" EntityType="Self.Entidad" />
@@ -415,17 +467,13 @@
           <EntitySet Name="PlazoGracia" EntityType="Self.PlazoGracia" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="TipoTasa" EntityType="Self.TipoTasa" />
-          <AssociationSet Name="Bono_Capitalizacion" Association="Self.Bono_Capitalizacion">
-            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
-            <End Role="Bono" EntitySet="Bono" />
-          </AssociationSet>
           <AssociationSet Name="Bono_Entidad" Association="Self.Bono_Entidad">
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="Bono" EntitySet="Bono" />
           </AssociationSet>
-          <AssociationSet Name="Bono_Tasa" Association="Self.Bono_Tasa">
-            <End Role="TipoTasa" EntitySet="TipoTasa" />
+          <AssociationSet Name="Bono_Tasa_Bono" Association="Self.Bono_Tasa_Bono">
             <End Role="Bono" EntitySet="Bono" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
           </AssociationSet>
           <AssociationSet Name="Costes_Gastos_Bono" Association="Self.Costes_Gastos_Bono">
             <End Role="Bono" EntitySet="Bono" />
@@ -438,6 +486,14 @@
           <AssociationSet Name="PlazoBono_Bono" Association="Self.PlazoBono_Bono">
             <End Role="Bono" EntitySet="Bono" />
             <End Role="PlazoBono" EntitySet="PlazoBono" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa_Capitalizacion" Association="Self.Bono_Tasa_Capitalizacion">
+            <End Role="Capitalizacion" EntitySet="Capitalizacion" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
+          </AssociationSet>
+          <AssociationSet Name="Bono_Tasa_TipoTasa" Association="Self.Bono_Tasa_TipoTasa">
+            <End Role="TipoTasa" EntitySet="TipoTasa" />
+            <End Role="Bono_Tasa" EntitySet="Bono_Tasa" />
           </AssociationSet>
           <AssociationSet Name="PlazoBono_PlazoGracia" Association="Self.PlazoBono_PlazoGracia">
             <End Role="PlazoGracia" EntitySet="PlazoGracia" />
@@ -460,13 +516,22 @@
                 <ScalarProperty Name="NroAnios" ColumnName="NroAnios" />
                 <ScalarProperty Name="FrecCupon" ColumnName="FrecCupon" />
                 <ScalarProperty Name="DiasPorAnio" ColumnName="DiasPorAnio" />
-                <ScalarProperty Name="TipoTasa" ColumnName="TipoTasa" />
-                <ScalarProperty Name="Capitalizacion" ColumnName="Capitalizacion" />
-                <ScalarProperty Name="TasaInteres" ColumnName="TasaInteres" />
-                <ScalarProperty Name="TasaAnualDesc" ColumnName="TasaAnualDesc" />
-                <ScalarProperty Name="ImpuestoRenta" ColumnName="ImpuestoRenta" />
+                <ScalarProperty Name="ImpRenta" ColumnName="ImpRenta" />
                 <ScalarProperty Name="FechaEmision" ColumnName="FechaEmision" />
+                <ScalarProperty Name="TasaAnualDescuento" ColumnName="TasaAnualDescuento" />
                 <ScalarProperty Name="Inflacion" ColumnName="Inflacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bono_Tasa">
+            <EntityTypeMapping TypeName="BonoCorpAlemanModel.Bono_Tasa">
+              <MappingFragment StoreEntitySet="Bono_Tasa">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TipoTasa_ID" ColumnName="TipoTasa_ID" />
+                <ScalarProperty Name="Bono_BonoID" ColumnName="Bono_BonoID" />
+                <ScalarProperty Name="TasaInteres" ColumnName="TasaInteres" />
+                <ScalarProperty Name="NroCuota" ColumnName="NroCuota" />
+                <ScalarProperty Name="capitalizacion" ColumnName="capitalizacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -506,6 +571,7 @@
               <MappingFragment StoreEntitySet="Inflacion">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Bono_ID" ColumnName="Bono_ID" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -515,6 +581,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Bono_ID" ColumnName="Bono_ID" />
                 <ScalarProperty Name="PlazoGracia_ID" ColumnName="PlazoGracia_ID" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

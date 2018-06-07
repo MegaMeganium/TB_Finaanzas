@@ -1,25 +1,32 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2018-05-27 05:09:39.581
+-- Last modification date: 2018-06-06 17:32:21.374
 
 -- tables
 -- Table: Bono
-use BonoCorpAleman;
 CREATE TABLE Bono (
     BonoID bigint  NOT NULL IDENTITY,
     Entidad_ID nvarchar(30)  NOT NULL,
-    ValorNominal int  NOT NULL,
+    ValorNominal money  NOT NULL,
     ValorComercial int  NOT NULL,
     NroAnios int  NOT NULL,
     FrecCupon int  NOT NULL,
     DiasPorAnio int  NOT NULL,
-    TipoTasa int  NOT NULL,
-    Capitalizacion int  NOT NULL,
-    TasaInteres int  NOT NULL,
-    TasaAnualDesc int  NOT NULL,
-    ImpuestoRenta int  NOT NULL,
+    ImpRenta int  NOT NULL,
     FechaEmision date  NOT NULL,
-    Inflacion int  NOT NULL,
+    TasaAnualDescuento int  NOT NULL,
+    Inflacion int  NULL,
     CONSTRAINT Bono_pk PRIMARY KEY  (BonoID)
+);
+
+-- Table: Bono_Tasa
+CREATE TABLE Bono_Tasa (
+    ID int  NOT NULL,
+    TipoTasa_ID int  NOT NULL,
+    Bono_BonoID bigint  NOT NULL,
+    TasaInteres int  NOT NULL,
+    NroCuota int  NOT NULL,
+    capitalizacion int  NULL,
+    CONSTRAINT Bono_Tasa_pk PRIMARY KEY  (ID)
 );
 
 -- Table: Capitalizacion
@@ -54,14 +61,16 @@ CREATE TABLE Entidad (
 CREATE TABLE Inflacion (
     ID int  NOT NULL IDENTITY,
     Bono_ID bigint  NOT NULL,
+    Fecha date  NOT NULL,
     CONSTRAINT Inflacion_pk PRIMARY KEY  (ID)
 );
 
 -- Table: PlazoBono
 CREATE TABLE PlazoBono (
-    ID bigint  NOT NULL IDENTITY,
+    ID int  NOT NULL IDENTITY,
     Bono_ID bigint  NOT NULL,
     PlazoGracia_ID int  NOT NULL,
+    Fecha date  NOT NULL,
     CONSTRAINT PlazoBono_pk PRIMARY KEY  (ID)
 );
 
@@ -69,7 +78,7 @@ CREATE TABLE PlazoBono (
 CREATE TABLE PlazoGracia (
     ID int  NOT NULL IDENTITY,
     Nombre nvarchar(15)  NOT NULL,
-    Descripcion text  NOT NULL,
+    Descripcion text  NULL,
     CONSTRAINT PlazoGracia_pk PRIMARY KEY  (ID)
 );
 
@@ -81,19 +90,24 @@ CREATE TABLE TipoTasa (
 );
 
 -- foreign keys
--- Reference: Bono_Capitalizacion (table: Bono)
-ALTER TABLE Bono ADD CONSTRAINT Bono_Capitalizacion
-    FOREIGN KEY (Capitalizacion)
-    REFERENCES Capitalizacion (ID);
-
 -- Reference: Bono_Entidad (table: Bono)
 ALTER TABLE Bono ADD CONSTRAINT Bono_Entidad
     FOREIGN KEY (Entidad_ID)
     REFERENCES Entidad (ID_email);
 
--- Reference: Bono_Tasa (table: Bono)
-ALTER TABLE Bono ADD CONSTRAINT Bono_Tasa
-    FOREIGN KEY (TipoTasa)
+-- Reference: Bono_Tasa_Bono (table: Bono_Tasa)
+ALTER TABLE Bono_Tasa ADD CONSTRAINT Bono_Tasa_Bono
+    FOREIGN KEY (Bono_BonoID)
+    REFERENCES Bono (BonoID);
+
+-- Reference: Bono_Tasa_Capitalizacion (table: Bono_Tasa)
+ALTER TABLE Bono_Tasa ADD CONSTRAINT Bono_Tasa_Capitalizacion
+    FOREIGN KEY (capitalizacion)
+    REFERENCES Capitalizacion (ID);
+
+-- Reference: Bono_Tasa_TipoTasa (table: Bono_Tasa)
+ALTER TABLE Bono_Tasa ADD CONSTRAINT Bono_Tasa_TipoTasa
+    FOREIGN KEY (TipoTasa_ID)
     REFERENCES TipoTasa (ID);
 
 -- Reference: Costes_Gastos_Bono (table: Costes_Gastos)
