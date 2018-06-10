@@ -45,7 +45,7 @@ namespace BonoCorpAleman.Controllers.Bono
             {
                 using(var transactionScope = new TransactionScope())
                 {
-                    //Le tengo que especifical que es del Model ya que hay un namespace con Bono y se confunde
+                    //Le tengo que especificar que es del Model ya que hay un namespace con Bono y se confunde
                     var bono = new Models.Bono();
                     if (model.BonoId.HasValue)
                     {

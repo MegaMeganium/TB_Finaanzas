@@ -26,7 +26,7 @@ namespace BonoCorpAleman.Helpers
             bono.ValorNominal = model.ValorNominal;
             bono.ValorComercial = model.ValorComercial;
             bono.NroAnios = model.nAnios;
-            bono.FrecCupon = model.frecCupon.Value;
+            bono.FrecCupon = model.frecCupon;
             bono.DiasPorAnio = model.diasXanio;
             bono.ImpRenta = model.ImpRenta;
             bono.FechaEmision = model.FechaEmision;
@@ -40,17 +40,18 @@ namespace BonoCorpAleman.Helpers
             Debug.WriteLine(model.LstValorTasa.Count+", "+ model.LstTasaId.Count);
             for (var i = 0; i < model.LstValorTasa.Count; i++)
             {
-                Debug.WriteLine("i: "+ i +" -> "+model.LstValorTasa[i] + ", " + model.LstTasaId[i]);
+                Debug.WriteLine("i: "+ i +" -> "+ model.LstTasaId[i] + ", " + model.LstValorTasa[i] + ", "+ model.LstCapitalizaciones[i] +", "+model.LstNroPeriodos[i]);
             }
             for (var i = 0; i < model.LstValorTasa.Count; i++)
             {
                 bono.Bono_Tasa.Add(new Bono_Tasa
                 {
+                    //ID del Bono_Tasa se autogenera
                     TipoTasa_ID = model.LstTasaId[i],
                     //BonoId se autogenera ya que es IDENTITY el pk del Bono
                     TasaInteres = model.LstValorTasa[i],
-                    NroCuota = 2,
-                    capitalizacion = model.capitalizacionId
+                    NroCuota = model.LstNroPeriodos[i],
+                    capitalizacion = model.LstCapitalizaciones[i].validacionCap()
                 });
             }
         }

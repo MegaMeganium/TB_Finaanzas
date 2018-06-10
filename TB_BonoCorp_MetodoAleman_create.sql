@@ -14,7 +14,6 @@ CREATE TABLE Bono (
     ImpRenta int  NOT NULL,
     FechaEmision date  NOT NULL,
     TasaAnualDescuento int  NOT NULL,
-    Inflacion int  NULL,
     CONSTRAINT Bono_pk PRIMARY KEY  (BonoID)
 );
 

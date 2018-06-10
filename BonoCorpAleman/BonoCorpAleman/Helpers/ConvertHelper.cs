@@ -25,5 +25,12 @@ namespace BonoCorpAleman.Helpers
         {
             return (val == null || val.Length > 0);
         }
+
+        public static int? validacionCap(this int? val)
+        {
+            if (val == 0 || val == null || !val.HasValue)
+                return null;
+            return val;
+        }
     }
 }

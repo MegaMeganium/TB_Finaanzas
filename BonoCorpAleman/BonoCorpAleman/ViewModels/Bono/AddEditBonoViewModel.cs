@@ -30,7 +30,7 @@ namespace BonoCorpAleman.ViewModels.Bono
 
         [Required(ErrorMessage = "Escoja una Frecuencia")]
         [Display(Name = "Frecuencia del Cupon")]
-        public int? frecCupon { get; set; } = 1;
+        public int frecCupon { get; set; }
 
         [Required(ErrorMessage = "¿Cuantos dias por año?")]
         [Range(360, 365, ErrorMessage = "debe colocar un valor entre 360 y 365")]
@@ -68,6 +68,8 @@ namespace BonoCorpAleman.ViewModels.Bono
         
         public List<int> LstTasaId { get; set; }
         public List<int> LstValorTasa { get; set; }
+        public List<int?> LstCapitalizaciones { get; set; }
+        public List<int> LstNroPeriodos { get; set; }
 
         public List<Bono_Tasa> LstBonoTasa { get; set; }
         public List<Inflacion> LstInflacion { get; set; }
