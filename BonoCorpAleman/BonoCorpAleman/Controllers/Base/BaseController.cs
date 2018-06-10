@@ -9,7 +9,7 @@ namespace BonoCorpAleman.Controllers
 {
     public class BaseController : Controller
     {
-        protected BonoCorpAlemanEntities context = new BonoCorpAlemanEntities();
+        protected BonoCorpAlemanEntities1 context = new BonoCorpAlemanEntities1();
 
     }
 }

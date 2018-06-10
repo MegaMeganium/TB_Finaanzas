@@ -34,12 +34,12 @@ namespace BonoCorpAleman.ViewModels
             };
         }
 
-        public bool Exist(BonoCorpAlemanEntities context)
+        public bool Exist(BonoCorpAlemanEntities1 context)
         {
             return (context.Entidad.Find(Email) != null);
         }
 
-        public void CargarDatos(BonoCorpAlemanEntities context, String Email)/*si es que se edita se le llama*/
+        public void CargarDatos(BonoCorpAlemanEntities1 context, String Email)
         {/*para editar*/
             var user = context.Entidad.Find(Email);
             if (user != null)

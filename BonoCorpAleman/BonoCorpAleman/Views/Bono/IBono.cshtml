@@ -1,0 +1,143 @@
+﻿@model BonoCorpAleman.ViewModels.Bono.AddEditBonoViewModel
+
+@{
+    ViewBag.Title = "IBono";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>IBono</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>BonoViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(momdel => Model.BonoId)
+        @Html.HiddenFor(model => model.userId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValorNominal, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ValorNominal, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValorNominal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValorComercial, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ValorComercial, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValorComercial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.nAnios, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.nAnios, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nAnios, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="frecCupon">
+            @Html.LabelFor(model => model.frecCupon, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.frecCupon, Model.GetFrecuencias, "[-Seleccionar-]", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.frecCupon, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.diasXanio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.diasXanio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.diasXanio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TasaId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <table id="tableTasa">
+                    <tr id="tableTRtasa1">
+                        <td>
+                            <select class="form-control valid" data-val="true" name="LstTasaId">
+                                <option value="">[-Seleccionar-]</option>
+                                <option value="1">Nominal</option>
+                                <option value="2">Efectiva</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="tableTRtasa2">
+                        <td>
+                            <input class="form-control text-box single-line valid" name="LstValorTasa" type="number" value="0">
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group" id="CapBono">
+            @Html.LabelFor(model => model.capitalizacionId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* donde se almacenara el valor, SelectList(lista, valor, Nombre a colocar de c/elemento), nombre por defecto, atributos HTML *@
+                @Html.DropDownListFor(model => model.capitalizacionId, Model.GetCapitalizaciones, "[seleccionar]", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.capitalizacionId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.TasaInteres, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TasaInteres, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TasaInteres, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TasaAnualDescuento, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TasaAnualDescuento, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TasaAnualDescuento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImpRenta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ImpRenta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ImpRenta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+                <input id="btnAddTasa" class="btn btn-default" value="Agregar Tasa" type="button" />
+                
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/MyScripts/main.js")"></script>
+}

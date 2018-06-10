@@ -72,30 +72,28 @@ namespace BonoCorpAleman.Controllers
             if (!ModelState.IsValid)
             {
                 TryUpdateModel(model);
-                Debug.WriteLine("no es valido");
+                Debug.WriteLine("AEuser - no es valido");
                 return View(model);
             }
             try
             {
+                /*TODO O NADA*/
                 using(var transactionScope = new TransactionScope())
                 {
                     var user = new Entidad();
                     if (model.Exist(context))//editar
                     {
-                        Debug.WriteLine("if: editar");
+                        Debug.WriteLine("AEuser - if: editar");
                         user = context.Entidad.Find(model.Email);
                     }else
                     {//agregar
-                        Debug.WriteLine("else: agregar");
+                        Debug.WriteLine("AEuser - else: agregar");
                         context.Entidad.Add(user);
                     }
 
-                    user.Nombre = model.Name;
-                    user.Apellido = model.LastName;
-                    user.Password = model.Password;
-                    user.ID_email = model.Email;
+                    model.TransferModel(ref user);
 
-                    Debug.WriteLine("antes de guardar");
+                    Debug.WriteLine("AEuser - antes de guardar");
                     context.SaveChanges();
                     transactionScope.Complete();
 
@@ -105,7 +103,7 @@ namespace BonoCorpAleman.Controllers
             catch (Exception)
             {
                 model.CargarDatos(context, model.Email);
-                Debug.WriteLine("catch");
+                Debug.WriteLine("AEuser - catch");
                 TryUpdateModel(model);
                 return View(model);
             }

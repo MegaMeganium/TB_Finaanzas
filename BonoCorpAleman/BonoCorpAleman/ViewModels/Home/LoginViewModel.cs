@@ -18,7 +18,7 @@ namespace BonoCorpAleman.ViewModels
         public String Email { get; set; }
         public Entidad Usuario { get; set; }
 
-        public void FindUsuario(BonoCorpAlemanEntities context)
+        public void FindUsuario(BonoCorpAlemanEntities1 context)
         {
             Usuario = context.Entidad.FirstOrDefault(x => x.ID_email == this.Email && x.Password == this.Password);
         }

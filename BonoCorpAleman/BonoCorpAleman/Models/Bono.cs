@@ -19,7 +19,7 @@ namespace BonoCorpAleman.Models
         {
             this.Bono_Tasa = new HashSet<Bono_Tasa>();
             this.Costes_Gastos = new HashSet<Costes_Gastos>();
-            this.Inflacion1 = new HashSet<Inflacion>();
+            this.Inflacion = new HashSet<Inflacion>();
             this.PlazoBono = new HashSet<PlazoBono>();
         }
     
@@ -33,7 +33,6 @@ namespace BonoCorpAleman.Models
         public int ImpRenta { get; set; }
         public System.DateTime FechaEmision { get; set; }
         public int TasaAnualDescuento { get; set; }
-        public Nullable<int> Inflacion { get; set; }
     
         public virtual Entidad Entidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -41,7 +40,7 @@ namespace BonoCorpAleman.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Costes_Gastos> Costes_Gastos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Inflacion> Inflacion1 { get; set; }
+        public virtual ICollection<Inflacion> Inflacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PlazoBono> PlazoBono { get; set; }
     }

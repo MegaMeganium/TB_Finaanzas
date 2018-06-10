@@ -13,10 +13,10 @@ namespace BonoCorpAleman.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BonoCorpAlemanEntities : DbContext
+    public partial class BonoCorpAlemanEntities1 : DbContext
     {
-        public BonoCorpAlemanEntities()
-            : base("name=BonoCorpAlemanEntities")
+        public BonoCorpAlemanEntities1()
+            : base("name=BonoCorpAlemanEntities1")
         {
         }
     

@@ -20,7 +20,7 @@ CREATE TABLE Bono (
 
 -- Table: Bono_Tasa
 CREATE TABLE Bono_Tasa (
-    ID int  NOT NULL,
+    ID int  IDENTITY(1,1) NOT NULL,
     TipoTasa_ID int  NOT NULL,
     Bono_BonoID bigint  NOT NULL,
     TasaInteres int  NOT NULL,

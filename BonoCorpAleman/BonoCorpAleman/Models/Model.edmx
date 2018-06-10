@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BonoCorpAlemanModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BonoCorpAlemanModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Bono">
           <Key>
             <PropertyRef Name="BonoID" />
@@ -19,13 +19,12 @@
           <Property Name="ImpRenta" Type="int" Nullable="false" />
           <Property Name="FechaEmision" Type="date" Nullable="false" />
           <Property Name="TasaAnualDescuento" Type="int" Nullable="false" />
-          <Property Name="Inflacion" Type="int" />
         </EntityType>
         <EntityType Name="Bono_Tasa">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoTasa_ID" Type="int" Nullable="false" />
           <Property Name="Bono_BonoID" Type="bigint" Nullable="false" />
           <Property Name="TasaInteres" Type="int" Nullable="false" />
@@ -242,8 +241,7 @@
             <End Role="PlazoBono" EntitySet="PlazoBono" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BonoCorpAlemanModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -261,11 +259,10 @@
           <Property Name="ImpRenta" Type="Int32" Nullable="false" />
           <Property Name="FechaEmision" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="TasaAnualDescuento" Type="Int32" Nullable="false" />
-          <Property Name="Inflacion" Type="Int32" />
           <NavigationProperty Name="Entidad" Relationship="Self.Bono_Entidad" FromRole="Bono" ToRole="Entidad" />
           <NavigationProperty Name="Bono_Tasa" Relationship="Self.Bono_Tasa_Bono" FromRole="Bono" ToRole="Bono_Tasa" />
           <NavigationProperty Name="Costes_Gastos" Relationship="Self.Costes_Gastos_Bono" FromRole="Bono" ToRole="Costes_Gastos" />
-          <NavigationProperty Name="Inflacion1" Relationship="Self.Inflacion_Bono" FromRole="Bono" ToRole="Inflacion" />
+          <NavigationProperty Name="Inflacion" Relationship="Self.Inflacion_Bono" FromRole="Bono" ToRole="Inflacion" />
           <NavigationProperty Name="PlazoBono" Relationship="Self.PlazoBono_Bono" FromRole="Bono" ToRole="PlazoBono" />
         </EntityType>
         <EntityType Name="Bono_Tasa">
@@ -456,7 +453,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="BonoCorpAlemanEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="BonoCorpAlemanEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bono" EntityType="Self.Bono" />
           <EntitySet Name="Bono_Tasa" EntityType="Self.Bono_Tasa" />
           <EntitySet Name="Capitalizacion" EntityType="Self.Capitalizacion" />
@@ -505,7 +502,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BonoCorpAlemanModelStoreContainer" CdmEntityContainer="BonoCorpAlemanEntities">
+        <EntityContainerMapping StorageEntityContainer="BonoCorpAlemanModelStoreContainer" CdmEntityContainer="BonoCorpAlemanEntities1">
           <EntitySetMapping Name="Bono">
             <EntityTypeMapping TypeName="BonoCorpAlemanModel.Bono">
               <MappingFragment StoreEntitySet="Bono">
@@ -519,7 +516,6 @@
                 <ScalarProperty Name="ImpRenta" ColumnName="ImpRenta" />
                 <ScalarProperty Name="FechaEmision" ColumnName="FechaEmision" />
                 <ScalarProperty Name="TasaAnualDescuento" ColumnName="TasaAnualDescuento" />
-                <ScalarProperty Name="Inflacion" ColumnName="Inflacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

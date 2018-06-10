@@ -25,6 +25,7 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Login","Login","Home")</li>
                     <li>@Html.ActionLink("Sigin", "AddEditUser", "Home")</li>
+                    <li>@Html.ActionLink("Bono", "IBono", "Bono")</li>
                 </ul>
             </div>
         </div>
@@ -39,6 +40,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("scripts", required: false)
+    
 </body>
 </html>
