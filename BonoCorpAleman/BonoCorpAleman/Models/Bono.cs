@@ -25,14 +25,14 @@ namespace BonoCorpAleman.Models
     
         public long BonoID { get; set; }
         public string Entidad_ID { get; set; }
-        public decimal ValorNominal { get; set; }
-        public int ValorComercial { get; set; }
+        public double ValorNominal { get; set; }
+        public double ValorComercial { get; set; }
         public int NroAnios { get; set; }
         public int FrecCupon { get; set; }
         public int DiasPorAnio { get; set; }
-        public int ImpRenta { get; set; }
+        public double ImpRenta { get; set; }
         public System.DateTime FechaEmision { get; set; }
-        public int TasaAnualDescuento { get; set; }
+        public double TasaAnualDescuento { get; set; }
     
         public virtual Entidad Entidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

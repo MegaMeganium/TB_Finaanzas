@@ -17,7 +17,7 @@ namespace BonoCorpAleman.Models
         public int ID { get; set; }
         public int TipoTasa_ID { get; set; }
         public long Bono_BonoID { get; set; }
-        public int TasaInteres { get; set; }
+        public double TasaInteres { get; set; }
         public int NroCuota { get; set; }
         public Nullable<int> capitalizacion { get; set; }
     

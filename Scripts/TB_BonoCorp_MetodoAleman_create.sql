@@ -6,14 +6,14 @@
 CREATE TABLE Bono (
     BonoID bigint  NOT NULL IDENTITY,
     Entidad_ID nvarchar(30)  NOT NULL,
-    ValorNominal money  NOT NULL,
-    ValorComercial int  NOT NULL,
+    ValorNominal float  NOT NULL,
+    ValorComercial float  NOT NULL,
     NroAnios int  NOT NULL,
     FrecCupon int  NOT NULL,
     DiasPorAnio int  NOT NULL,
-    ImpRenta int  NOT NULL,
+    ImpRenta float  NOT NULL,
     FechaEmision date  NOT NULL,
-    TasaAnualDescuento int  NOT NULL,
+    TasaAnualDescuento float  NOT NULL,
     CONSTRAINT Bono_pk PRIMARY KEY  (BonoID)
 );
 
@@ -22,7 +22,7 @@ CREATE TABLE Bono_Tasa (
     ID int  IDENTITY(1,1) NOT NULL,
     TipoTasa_ID int  NOT NULL,
     Bono_BonoID bigint  NOT NULL,
-    TasaInteres int  NOT NULL,
+    TasaInteres float  NOT NULL,
     NroCuota int  NOT NULL,
     capitalizacion int  NULL,
     CONSTRAINT Bono_Tasa_pk PRIMARY KEY  (ID)
@@ -40,10 +40,8 @@ CREATE TABLE Costes_Gastos (
     ID int  NOT NULL IDENTITY,
     Bono_ID bigint  NOT NULL,
     Nombre nvarchar(15)  NOT NULL,
-    Valor int  NOT NULL,
-    Inicial bit  NOT NULL,
-    Emisor bit  NOT NULL,
-    Receptor bit  NOT NULL,
+    Valor float  NOT NULL,
+    Emisor int  NOT NULL,
     CONSTRAINT Costes_Gastos_pk PRIMARY KEY  (ID)
 );
 
@@ -60,7 +58,8 @@ CREATE TABLE Entidad (
 CREATE TABLE Inflacion (
     ID int  NOT NULL IDENTITY,
     Bono_ID bigint  NOT NULL,
-    Fecha date  NOT NULL,
+    Periodo int  NOT NULL,
+	Valor float NOT NULL
     CONSTRAINT Inflacion_pk PRIMARY KEY  (ID)
 );
 
@@ -69,7 +68,7 @@ CREATE TABLE PlazoBono (
     ID int  NOT NULL IDENTITY,
     Bono_ID bigint  NOT NULL,
     PlazoGracia_ID int  NOT NULL,
-    Fecha date  NOT NULL,
+    Periodo int  NOT NULL,
     CONSTRAINT PlazoBono_pk PRIMARY KEY  (ID)
 );
 

@@ -4,7 +4,10 @@
     ViewBag.Title = "IBono";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/MyScripts/IBonoMain.js")"></script>
+}
 <h2>IBono</h2>
 
 
@@ -60,13 +63,13 @@
         </div>
 
         <div class="form-group" id="BonoTasaGroup">
-            @Html.LabelFor(model => model.TasaId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <label class="control-label col-md-2">Tasa de Interes</label>
             <div class="col-md-10">
                 <table id="tableTasa">
                     <tr id="tableTRtasa1">
                         <td>
                             <select class="form-control valid" data-val="true" name="LstTasaId">
-                                <option value="">[-Seleccionar-]</option>
+                                <option value="">Tipo de Tasa</option>
                                 <option value="1">Nominal</option>
                                 <option value="2">Efectiva</option>
                             </select>
@@ -74,13 +77,13 @@
                     </tr>
                     <tr id="tableTRtasa2">
                         <td>
-                            <input class="form-control text-box single-line valid" name="LstValorTasa" type="number" value="0">
+                            <input class="form-control text-box single-line valid" name="LstValorTasa" type="number" placeholder="valor de tasa(%)">
                         </td>
                     </tr>
                     <tr id="tableTRtasa3">
                         <td>
                             <select class="form-control valid" data-val="true" name="LstCapitalizaciones">
-                                <option value="">[-Seleccionar-]</option>
+                                <option value="1">Capitalizacion?</option>
                                 @foreach (var obj in Model.LstCapitalizacion)
                                 {
                                     <option value="@obj.ID">@obj.Nombre</option>
@@ -90,7 +93,7 @@
                     </tr>
                     <tr id="tableTRtasa4">
                         <td>
-                            <input class="form-control text-box single-line valid" name="LstNroPeriodos" type="number" value="0">
+                            <input class="form-control text-box single-line valid" name="LstNroPeriodos" type="number" placeholder="En que periodo">
                         </td>
                     </tr>
                 </table>
@@ -106,19 +109,35 @@
             </div>
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.TasaInteres, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TasaInteres, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TasaInteres, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
         <div class="form-group">
             @Html.LabelFor(model => model.TasaAnualDescuento, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TasaAnualDescuento, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TasaAnualDescuento, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Plazo de Gracia</label>
+            <div class="col-md-10">
+                <table>
+                    <tr id="tablePGTR1">
+                        <td>
+                            <select class="form-control valid" data-val="true" name="LstPlazosDeGraciaId">
+                                <option value="">[-Seleccionar-]</option>
+                                @foreach (var obj in Model.LstPlazoGracia)
+                                {
+                                    <option value="@obj.ID">@obj.Nombre</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="tablePGTR2">
+                        <td>
+                            <input class="form-control text-box single-line valid" name="LstPerPlazoBono" type="number" placeholder="En que periodo">
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 
@@ -131,6 +150,24 @@
         </div>
 
         <div class="form-group">
+            <label class="control-label col-md-2">Inflacion</label>
+            <div class="col-md-10">
+                <table id="tableInflacion">
+                    <tr id="tableInflacionTR1">
+                        <td>
+                            <input class="form-control text-box single-line valid" name="LstValInflaciones" type="number" placeholder="Porcentaje">
+                        </td>
+                    </tr>
+                    <tr id="tableInflacionTR2">
+                        <td>
+                            <input class="form-control text-box single-line valid" name="LstPerInflaciones" type="number" placeholder="En que periodo">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control" } })
@@ -138,11 +175,22 @@
             </div>
         </div>
 
+        @for(int i = 0; i < 5; i++)
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2">@Model.LstCostesGastosNombres[i]</label>
+                <div class="col-md-10">
+                    <input class="form-control text-box single-line valid" name="LstCostesGastosValores" type="number" placeholder="valor">
+                </div>
+            </div>
+        }
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
                 <input id="btnAddTasa" class="btn btn-default" value="Agregar Tasa" type="button" />
-                
+                <input id="btnAddPlazoG" class="btn btn-default" value="Agregar Plazo de Gracia" type="button" />
+                <input id="btnAddInflacion" class="btn btn-default" value="Agregar Inflacion" type="button" />
             </div>
         </div>
     </div>
@@ -152,7 +200,4 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    <script src="@Url.Content("~/Scripts/MyScripts/IBonoMain.js")"></script>
-}
+

@@ -17,7 +17,7 @@ namespace BonoCorpAleman.Models
         public int ID { get; set; }
         public long Bono_ID { get; set; }
         public int PlazoGracia_ID { get; set; }
-        public System.DateTime Fecha { get; set; }
+        public int Periodo { get; set; }
     
         public virtual Bono Bono { get; set; }
         public virtual PlazoGracia PlazoGracia { get; set; }

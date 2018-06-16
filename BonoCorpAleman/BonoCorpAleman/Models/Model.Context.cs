@@ -33,7 +33,6 @@ namespace BonoCorpAleman.Models
         public virtual DbSet<Inflacion> Inflacion { get; set; }
         public virtual DbSet<PlazoBono> PlazoBono { get; set; }
         public virtual DbSet<PlazoGracia> PlazoGracia { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TipoTasa> TipoTasa { get; set; }
     }
 }

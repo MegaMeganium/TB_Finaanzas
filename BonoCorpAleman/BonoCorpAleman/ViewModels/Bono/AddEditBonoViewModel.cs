@@ -18,11 +18,11 @@ namespace BonoCorpAleman.ViewModels.Bono
 
         [Required(ErrorMessage = "Coloque un monto")]
         [Display(Name ="Valor Nominal")]
-        public decimal ValorNominal { get; set; }
+        public double ValorNominal { get; set; }
 
         [Required(ErrorMessage = "Coloque un monto")]
         [Display(Name = "Valor Comercial")]
-        public int ValorComercial { get; set; }
+        public double ValorComercial { get; set; }
 
         [Required(ErrorMessage = "¿Cuantos Años?")]
         [Display(Name = "N° Años")]
@@ -48,17 +48,17 @@ namespace BonoCorpAleman.ViewModels.Bono
         [Required(ErrorMessage = "¿La Tasa?")]
         [Range(0, 100, ErrorMessage = "debe colocar un valor entre 0 y 100%")]
         [Display(Name = "Tasa de Interes")]
-        public int TasaInteres { get; set; }
+        public double TasaInteres { get; set; }
 
         [Required(ErrorMessage = "Coloque un valor")]
         [Range(0, 100, ErrorMessage = "debe colocar un valor entre 0 y 100%")]
         [Display(Name = "Tasa Anual de Descuento")]
-        public int TasaAnualDescuento { get; set; }
+        public double TasaAnualDescuento { get; set; }
 
         [Required(ErrorMessage = "¿Cual es el impuesto a la renta?")]
         [Range(0, 100, ErrorMessage = "debe colocar un valor entre 0 y 100%")]  
         [Display(Name = "Impuesto a la Renta")]
-        public int ImpRenta { get; set; }
+        public double ImpRenta { get; set; }
 
         [Required(ErrorMessage = "¿Fecha?")]
         [Display(Name = "Fecha de Emision")]
@@ -66,15 +66,34 @@ namespace BonoCorpAleman.ViewModels.Bono
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaEmision { get; set; }
         
+        /*BonoTasa*/
         public List<int> LstTasaId { get; set; }
-        public List<int> LstValorTasa { get; set; }
+        public List<double> LstValorTasa { get; set; }
         public List<int?> LstCapitalizaciones { get; set; }
         public List<int> LstNroPeriodos { get; set; }
+        /*Inflacion*/
+        public List<double> LstValInflaciones { get; set; }
+        public List<int> LstPerInflaciones { get; set; }
+        /*PlazoBono*/
+        public List<int> LstPerPlazoBono { get; set; }
+        public List<int> LstPlazosDeGraciaId { get; set; }
+        /*Costos/Gastos iniciales*/
+        public List<string> LstCostesGastosNombres { get; set; } = new List<string>()
+        {
+            "Prima", "Estructuracion", "Colocacion", "Flotacion", "CAVALI"
+        };
+        public List<double> LstCostesGastosValores { get; set; }
+        public List<int> LstCostesGastosEmisor { get; set; } = new List<int>()
+        {
+            0, 1, 1, 3, 3
+        };
+        /*----*/
 
         public List<Bono_Tasa> LstBonoTasa { get; set; }
         public List<Inflacion> LstInflacion { get; set; }
         public List<Costes_Gastos> LstCostes_Gastos { get; set; }
         public List<PlazoBono> LstPlazoBono { get; set; }
+        public List<PlazoGracia> LstPlazoGracia { get; set; }
         public List<Capitalizacion> LstCapitalizacion { get; set; }
         public List<TipoTasa> LstTipoTasa { get; set; }
         public List<object> LstFrecuencia = new List<object>() {
@@ -95,7 +114,7 @@ namespace BonoCorpAleman.ViewModels.Bono
             get { return new SelectList(LstCapitalizacion, "ID", "Nombre"); }
         }
 
-        public void CargarDatos(BonoCorpAlemanEntities1 context, Int32? bonoId)
+        public void CargarDatos(BonoCorpAlemanEntities1 context, int? bonoId)
         {
             this.BonoId = bonoId;
             var bono = context.Bono.Find(BonoId);
@@ -118,6 +137,7 @@ namespace BonoCorpAleman.ViewModels.Bono
             }
             LstCapitalizacion = context.Capitalizacion.OrderBy(x => x.ID).ToList();
             LstTipoTasa = context.TipoTasa.OrderBy(x => x.ID).ToList();
+            LstPlazoGracia = context.PlazoGracia.OrderBy(x => x.ID).ToList();
         }
 
     }

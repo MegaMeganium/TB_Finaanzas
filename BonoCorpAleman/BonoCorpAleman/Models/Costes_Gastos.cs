@@ -17,10 +17,8 @@ namespace BonoCorpAleman.Models
         public int ID { get; set; }
         public long Bono_ID { get; set; }
         public string Nombre { get; set; }
-        public int Valor { get; set; }
-        public bool Inicial { get; set; }
-        public bool Emisor { get; set; }
-        public bool Receptor { get; set; }
+        public double Valor { get; set; }
+        public int Emisor { get; set; }
     
         public virtual Bono Bono { get; set; }
     }

@@ -21,13 +21,29 @@ namespace BonoCorpAleman.Helpers
             }
         }
 
+        public static double ToDouble(this object val)
+        {
+            if (val == null)
+                return 0.0;
+            try
+            {
+                return Convert.ToDouble(val)+0.0;
+            }
+            catch (Exception)
+            {
+                return 0.0;
+            }
+        }
+
         public static bool IsNullOrEmpty(this String val)
         {
             return (val == null || val.Length > 0);
         }
 
-        public static int? validacionCap(this int? val)
+        public static int? validacionCap(this int? val, int tasaId = 1)
         {
+            if (tasaId != 1)
+                return null;
             if (val == 0 || val == null || !val.HasValue)
                 return null;
             return val;
