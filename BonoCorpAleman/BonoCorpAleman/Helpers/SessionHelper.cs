@@ -8,11 +8,11 @@ namespace BonoCorpAleman.Helpers
 {
     public static class SessionHelper
     {
-        public static String GetUsuarioId(this HttpSessionStateBase session, String def = "error")
+        public static String GetUsuarioId(this HttpSessionStateBase session, string def = "error")
         {
             return session["UsuarioId"].To_String(def);
         }
-        public static void SetUsuarioId(this HttpSessionStateBase session, String val)
+        public static void SetUsuarioId(this HttpSessionStateBase session, string val)
         {
             session["UsuarioId"] = val;
         }

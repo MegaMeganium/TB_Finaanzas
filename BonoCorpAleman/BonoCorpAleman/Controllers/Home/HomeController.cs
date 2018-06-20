@@ -24,13 +24,6 @@ namespace BonoCorpAleman.Controllers
 
             return View();
         }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
         
         [HttpGet]
         public ActionResult Login()
@@ -54,6 +47,13 @@ namespace BonoCorpAleman.Controllers
             Session.SetUsuarioId(model.Usuario.ID_email);
             Session.SetUsuario(model.Usuario);
 
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Logout()
+        {
+            Session.SetUsuarioId(null);
+            Session.SetUsuario(null);
             return RedirectToAction("Index", "Home");
         }
 

@@ -56,7 +56,7 @@ namespace BonoCorpAleman.Controllers.Bono
                         Debug.WriteLine("IBono - else:agregar");
                         context.Bono.Add(bono);
                     }
-
+                    model.userId = Session.GetUsuarioId();
                     model.TransferModel(ref bono);
 
                     Debug.WriteLine("IBono - antes de guardar");

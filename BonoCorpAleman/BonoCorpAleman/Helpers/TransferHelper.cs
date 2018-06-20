@@ -22,7 +22,7 @@ namespace BonoCorpAleman.Helpers
         public static void TransferModel(this AddEditBonoViewModel model, ref Models.Bono bono/*, ref Models.Bono_Tasa bonoTasa*/)
         {
             //ID del bono se autogenera
-            bono.Entidad_ID = "lagh3.30@gmail.com" /*model.userId*/;
+            bono.Entidad_ID = model.userId;
             bono.ValorNominal = model.ValorNominal.ToDouble();
             bono.ValorComercial = model.ValorComercial.ToDouble();
             bono.NroAnios = model.nAnios;
