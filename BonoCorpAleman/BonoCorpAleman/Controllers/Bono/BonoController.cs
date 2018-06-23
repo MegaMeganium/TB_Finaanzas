@@ -8,26 +8,40 @@ using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using BonoCorpAleman.ViewModels;
+using BonoCorpAleman.DAO.Implements;
+using BonoCorpAleman.DAO.Interface;
 
 namespace BonoCorpAleman.Controllers.Bono
 {
     public class BonoController : BaseController
     {
+        IBono BonoDAO { get; set; } = new BonoImplements();
         // GET: Bono
         public ActionResult Index()
         {
             return View();
         }
-
-        public void add()
+        
+        public ActionResult ListarBono(string filter)
         {
-
+            var viewModel = new ListBonoViewModel();
+            viewModel.CargarDatos(BonoDAO.context, Session.GetUsuarioId(), filter);
+            return View(viewModel);
         }
+
+        public ActionResult BorrarBono(int bonoId, string filter)
+        {
+            BonoDAO.Delete(bonoId);
+            var viewModel = new ListBonoViewModel();
+            viewModel.CargarDatos(BonoDAO.context, Session.GetUsuarioId(), filter);
+            return View(viewModel);
+        }
+
         [HttpGet]
         public ActionResult IBono(Int32? bonoId)
         {
             var viewModel = new AddEditBonoViewModel();
-            viewModel.CargarDatos(context, bonoId);
+            viewModel.CargarDatos(BonoDAO.context, bonoId);
             return View(viewModel);
         }
 
@@ -46,40 +60,22 @@ namespace BonoCorpAleman.Controllers.Bono
                 using(var transactionScope = new TransactionScope())
                 {
                     //Le tengo que especificar que es del Model ya que hay un namespace con Bono y se confunde
-                    var bono = new Models.Bono();
-                    if (model.BonoId.HasValue)
-                    {
-                        Debug.WriteLine("IBono - if:editar");
-                        bono = context.Bono.Find(model.BonoId);
-                    }else
-                    {
-                        Debug.WriteLine("IBono - else:agregar");
-                        context.Bono.Add(bono);
-                    }
                     model.userId = Session.GetUsuarioId();
-                    model.TransferModel(ref bono);
-
-                    Debug.WriteLine("IBono - antes de guardar");
-                    context.SaveChanges();
+                    BonoDAO.AddEditEntity(model);
+                    Debug.WriteLine("IBono - antes de TransactionScope");
                     transactionScope.Complete();
+                    Debug.WriteLine("IBono - Redireccionando al Index");
 
                     return RedirectToAction("Index", "Home");
                 }
             }
             catch (Exception ex)
             {
-                model.CargarDatos(context, model.BonoId);
-                Debug.WriteLine("AEuser - catch -> "+ex.Message+"\n"+ex.InnerException+"\n");
+                model.CargarDatos(BonoDAO.context, model.BonoId);
+                Debug.WriteLine("IBono - catch -> "+ex.Message+"\n"+ex.InnerException+"\n");
                 TryUpdateModel(model);
                 return View(model);
             }
-        }
-
-        public ActionResult IPrueba(AddEditUserViewModel model, FormCollection form)
-        {
-            var viewModel = new AddEditUserViewModel();
-
-            return View(viewModel);
         }
     }
 }

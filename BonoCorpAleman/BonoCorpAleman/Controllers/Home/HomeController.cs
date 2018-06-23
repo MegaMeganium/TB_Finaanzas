@@ -8,11 +8,15 @@ using System.Web.Mvc;
 using System.Transactions;
 using System.Diagnostics;
 using BonoCorpAleman.Models;
+using BonoCorpAleman.DAO.Implements;
+using BonoCorpAleman.DAO.Interface;
 
 namespace BonoCorpAleman.Controllers
 {
     public class HomeController : BaseController
     {
+        IEntidad EntidadDAO = new EntidadImplements();
+
         public ActionResult Index()
         {
             return View();
@@ -29,7 +33,7 @@ namespace BonoCorpAleman.Controllers
         public ActionResult Login()
         {
             var viewModel = new LoginViewModel();
-            viewModel.FindUsuario(context);
+            viewModel.FindUsuario(EntidadDAO.context);
             return View(viewModel);
         }
 
@@ -61,8 +65,7 @@ namespace BonoCorpAleman.Controllers
         public ActionResult AddEditUser(String Email)
         {
             var viewModel = new AddEditUserViewModel();
-            viewModel.CargarDatos(context, Email);
-            //viewModel.Email = Session.GetUsuarioId();
+            viewModel.CargarDatos(EntidadDAO.context, Email);
             return View(viewModel);
         }
 
@@ -80,29 +83,17 @@ namespace BonoCorpAleman.Controllers
                 /*TODO O NADA*/
                 using(var transactionScope = new TransactionScope())
                 {
-                    var user = new Entidad();
-                    if (model.Exist(context))//editar
-                    {
-                        Debug.WriteLine("AEuser - if: editar");
-                        user = context.Entidad.Find(model.Email);
-                    }else
-                    {//agregar
-                        Debug.WriteLine("AEuser - else: agregar");
-                        context.Entidad.Add(user);
-                    }
-
-                    model.TransferModel(ref user);
-
-                    Debug.WriteLine("AEuser - antes de guardar");
-                    context.SaveChanges();
+                    EntidadDAO.AddEditEntity(model);
+                    Debug.WriteLine("AEuser - antes de transacionComplete");
                     transactionScope.Complete();
+                    Debug.WriteLine("AEuser - redireccionando al Index");
 
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception)
             {
-                model.CargarDatos(context, model.Email);
+                model.CargarDatos(EntidadDAO.context, model.Email);
                 Debug.WriteLine("AEuser - catch");
                 TryUpdateModel(model);
                 return View(model);

@@ -27,7 +27,7 @@ namespace BonoCorpAleman.Helpers
                 return 0.0;
             try
             {
-                return Convert.ToDouble(val)+0.0;
+                return Convert.ToDouble(val);
             }
             catch (Exception)
             {
@@ -37,7 +37,7 @@ namespace BonoCorpAleman.Helpers
 
         public static bool IsNullOrEmpty(this String val)
         {
-            return (val == null || val.Length > 0);
+            return (val == null || val.Length <= 0);
         }
 
         public static int? validacionCap(this int? val, int tasaId = 1)

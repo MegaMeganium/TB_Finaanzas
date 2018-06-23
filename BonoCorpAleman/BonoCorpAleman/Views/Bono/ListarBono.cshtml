@@ -1,0 +1,32 @@
+﻿@model BonoCorpAleman.ViewModels.Bono.ListBonoViewModel
+
+@{
+    ViewBag.Title = "Lista de Bonos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ListarBono</h2>
+
+<p>
+    @Html.ActionLink("Crear Bono", "IBono")
+</p>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>#</th>
+    </tr>
+    
+@foreach (var item in Model.LstBono) {
+    <tr>
+        <td>
+            @item.BonoID
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "IBono", new { bonoId = item.BonoID }) |
+            @Html.ActionLink("Resultados", "Details", new { id = item.BonoID }) |
+            @Html.ActionLink("Eliminar", "BorrarBono", new { bonoId = item.BonoID, filter = "" })
+        </td>
+    </tr>
+}
+
+</table>

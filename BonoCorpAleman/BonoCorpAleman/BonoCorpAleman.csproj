@@ -161,6 +161,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\Bono\BonoController.cs" />
+    <Compile Include="DAO\Implements\BonoImplements.cs" />
+    <Compile Include="DAO\Interface\IBase.cs" />
+    <Compile Include="DAO\Implements\EntidadImplements.cs" />
+    <Compile Include="DAO\Interface\IBono.cs" />
+    <Compile Include="DAO\Interface\IEntidad.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
     <Compile Include="Helpers\EquationHelper.cs" />
     <Compile Include="Helpers\SessionHelper.cs" />
@@ -213,6 +218,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Bono\AddEditBonoViewModel.cs" />
+    <Compile Include="ViewModels\Bono\ListBonoViewModel.cs" />
     <Compile Include="ViewModels\Home\LoginViewModel.cs" />
     <Compile Include="ViewModels\Home\AddEditUserViewModel.cs" />
   </ItemGroup>
@@ -274,6 +280,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AddEditUser.cshtml" />
     <Content Include="Views\Bono\IBono.cshtml" />
+    <Content Include="Views\Bono\ListarBono.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

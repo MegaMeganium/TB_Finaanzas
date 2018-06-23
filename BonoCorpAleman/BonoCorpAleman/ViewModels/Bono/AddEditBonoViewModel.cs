@@ -10,10 +10,13 @@ namespace BonoCorpAleman.ViewModels.Bono
 {
     public class AddEditBonoViewModel
     {
-        [HiddenInput(DisplayValue = false)]
+        /// <summary>
+        /// Auxiliar para saber si se agrega o se edita
+        /// </summary>
+        public bool nuevo { get; set; } = true;
+
         public int? BonoId { get; set; }
 
-        [HiddenInput(DisplayValue = false)]
         public String userId { get; set; }
 
         [Required(ErrorMessage = "Coloque un monto")]
@@ -78,11 +81,14 @@ namespace BonoCorpAleman.ViewModels.Bono
         public List<int> LstPerPlazoBono { get; set; }
         public List<int> LstPlazosDeGraciaId { get; set; }
         /*Costos/Gastos iniciales*/
-        public List<string> LstCostesGastosNombres { get; set; } = new List<string>()
+        public IList<string> LstCostesGastosNombres = new List<string>()
         {
             "Prima", "Estructuracion", "Colocacion", "Flotacion", "CAVALI"
         };
-        public List<double> LstCostesGastosValores { get; set; }
+        public IList<double> LstCostesGastosValores { get; set; } = new List<double>()
+        {
+            0, 0, 0, 0, 0
+        };
         public List<int> LstCostesGastosEmisor { get; set; } = new List<int>()
         {
             0, 1, 1, 3, 3
@@ -96,14 +102,18 @@ namespace BonoCorpAleman.ViewModels.Bono
         public List<PlazoGracia> LstPlazoGracia { get; set; }
         public List<Capitalizacion> LstCapitalizacion { get; set; }
         public List<TipoTasa> LstTipoTasa { get; set; }
-        public List<object> LstFrecuencia = new List<object>() {
-            new {Dias = 30, Nombre = "Mensual"},
-            new {Dias = 60, Nombre = "Bimestral"},
-            new {Dias = 90, Nombre = "Trimestral"},
-            new {Dias = 120, Nombre = "Cuatrimestral"},
-            new {Dias = 180, Nombre = "Semestral"},
-            new {Dias = 360, Nombre = "Anual"}
-        };
+        public IEnumerable<object> LstFrecuencia {
+            get {
+                    return new List<object>() {
+                        new {Dias = 30, Nombre = "Mensual"},
+                        new {Dias = 60, Nombre = "Bimestral"},
+                        new {Dias = 90, Nombre = "Trimestral"},
+                        new {Dias = 120, Nombre = "Cuatrimestral"},
+                        new {Dias = 180, Nombre = "Semestral"},
+                        new {Dias = 360, Nombre = "Anual"}
+                    };
+            }
+        }
 
         public IEnumerable<SelectListItem> GetFrecuencias
         {
@@ -129,6 +139,9 @@ namespace BonoCorpAleman.ViewModels.Bono
                 ImpRenta = bono.ImpRenta;
                 FechaEmision = bono.FechaEmision;
                 TasaAnualDescuento = bono.TasaAnualDescuento;
+
+                LstCostesGastosValores = bono.Costes_Gastos.OrderBy(x => x.ID)
+                                                .Select(x=>x.Valor).ToList();
 
                 LstInflacion = bono.Inflacion.ToList();
                 LstCostes_Gastos = bono.Costes_Gastos.ToList();
