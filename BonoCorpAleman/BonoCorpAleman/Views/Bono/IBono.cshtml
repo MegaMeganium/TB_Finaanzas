@@ -93,7 +93,7 @@
                     </tr>
                     <tr id="tableTRtasa4">
                         <td>
-                            <input class="form-control text-box single-line valid" name="LstNroPeriodos" type="number" placeholder="En que periodo">
+                            <input class="form-control text-box single-line valid" name="LstNroPeriodos" type="number" placeholder="En que periodo" value="1" disabled>
                         </td>
                     </tr>
                 </table>
@@ -150,7 +150,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label col-md-2">Inflacion</label>
+            <label class="control-label col-md-2">Inflacion Anual</label>
             <div class="col-md-10">
                 <table id="tableInflacion">
                     <tr id="tableInflacionTR1">
@@ -160,7 +160,7 @@
                     </tr>
                     <tr id="tableInflacionTR2">
                         <td>
-                            <input class="form-control text-box single-line valid" name="LstPerInflaciones" type="number" placeholder="En que periodo">
+                            <input class="form-control text-box single-line valid" name="LstPerInflaciones" type="number" placeholder="En que periodo" value="1" disabled>
                         </td>
                     </tr>
                 </table>
@@ -181,9 +181,9 @@
                 <label class="control-label col-md-2">@Model.LstCostesGastosNombres[i]</label>
                 <div class="col-md-10">
                     <input class="form-control text-box single-line valid" name="LstCostesGastosValores" type="number" placeholder="valor" value="@Model.LstCostesGastosValores[i]">
-</div>
+                </div>
 
-</div>
+            </div>
         }
 
         <div class="form-group">

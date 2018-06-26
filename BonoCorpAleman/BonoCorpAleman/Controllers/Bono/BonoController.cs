@@ -77,5 +77,11 @@ namespace BonoCorpAleman.Controllers.Bono
                 return View(model);
             }
         }
+
+        public ActionResult RBono()
+        {
+
+            return View();
+        }
     }
 }
