@@ -1,0 +1,55 @@
+﻿@model BonoCorpAleman.TablaObject.Calculo
+
+@{
+    ViewBag.Title = "RBono";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Resultados del Bono</h2>
+
+<table class="table">
+    <tr>
+        <th>N°</th>
+        <th>Fecha Programada</th>
+        <th>Inflacion Anual</th>
+        <th>Inflacion Periodo</th>
+        <th>Plazo de Gracia</th>
+        <th>Bono</th>
+        <th>Bono Indexado</th>
+        <th>Cupon</th>
+        <th>Cuota</th>
+        <th>Amort.</th>
+        <th>Prima</th>
+        <th>Escudo</th>
+        <th>Flujo Emisor</th>
+        <th>FE c/Escudo</th>
+        <th>Flujo Bonista</th>
+        <th>Flujo Act.</th>
+        <th>FA x Plazo</th>
+        <th>Factor p/Convexidad</th>
+    </tr>
+
+@for (int i = 0; i < Model.size; i++) {
+    <tr>
+        <td>@i</td>
+        <td>@Model.tabla[i].FechaProgramada</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].InflacionAnual, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].InflacionPeriodo, 2)</td>
+        <td>@Model.tabla[i].PlazoGracia</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Bono, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].BonoIndexado, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Cupon, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Cuota, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Amortizacion, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Prima, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].Escudo, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoEmisor, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoEmisorEscudo, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoBonista, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoActivo, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FAxPlazo, 2)</td>
+        <td>@Decimal.Round((decimal)Model.tabla[i].FactorConvexidad, 2)</td>
+    </tr>
+}
+
+</table>

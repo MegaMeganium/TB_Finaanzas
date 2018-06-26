@@ -28,7 +28,10 @@ namespace BonoCorpAleman.Controllers
 
             return View();
         }
-        
+        public ActionResult Error()
+        {
+            return View("Error");
+        }
         [HttpGet]
         public ActionResult Login()
         {

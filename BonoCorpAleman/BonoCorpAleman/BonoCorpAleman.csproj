@@ -283,6 +283,7 @@
     <Content Include="Views\Home\AddEditUser.cshtml" />
     <Content Include="Views\Bono\IBono.cshtml" />
     <Content Include="Views\Bono\ListarBono.cshtml" />
+    <Content Include="Views\Bono\RBono.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

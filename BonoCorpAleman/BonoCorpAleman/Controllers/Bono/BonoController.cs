@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using BonoCorpAleman.ViewModels;
 using BonoCorpAleman.DAO.Implements;
 using BonoCorpAleman.DAO.Interface;
+using BonoCorpAleman.TablaObject;
 
 namespace BonoCorpAleman.Controllers.Bono
 {
@@ -78,10 +79,34 @@ namespace BonoCorpAleman.Controllers.Bono
             }
         }
 
-        public ActionResult RBono()
+        public ActionResult RBono(int? bonoId)
         {
-
-            return View();
+            if (!bonoId.HasValue)
+            {
+                Debug.WriteLine("RBono - ID del bono es nullo");
+                return RedirectToAction("Error", "Home");
+            }
+            var bono = BonoDAO.Find(bonoId.Value);
+            if (bono == null)
+            {
+                Debug.WriteLine("RBono - objeto bono no existe");
+                return RedirectToAction("Error", "Home");
+            }
+            try
+            {
+                var Tabla = new Calculo(bono);
+                if(Tabla != null)
+                    Debug.WriteLine("RBono - Tabla no nullo " + Tabla.bono.BonoID);
+                Debug.WriteLine("RBono - antes de cargar datos");
+                Tabla.CargarDatos();
+                Debug.WriteLine("RBono - cargaron los datos correctamente");
+                return View(Tabla);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return RedirectToAction("Error", "Home");
+            }
         }
     }
 }

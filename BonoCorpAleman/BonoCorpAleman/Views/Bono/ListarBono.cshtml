@@ -23,7 +23,7 @@
         </td>
         <td>
             @Html.ActionLink("Editar", "IBono", new { bonoId = item.BonoID }) |
-            @Html.ActionLink("Resultados", "Details", new { id = item.BonoID }) |
+            @Html.ActionLink("Resultados", "RBono", new { bonoId = item.BonoID }) |
             @Html.ActionLink("Eliminar", "BorrarBono", new { bonoId = item.BonoID, filter = "" })
         </td>
     </tr>
