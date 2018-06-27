@@ -10,7 +10,6 @@ namespace BonoCorpAleman.TablaObject
     public class Calculo 
     {
         public Models.Bono bono;
-        //public IList<Periodo> tabla;
         public Periodo[] tabla;
         public int size;
 
@@ -21,13 +20,13 @@ namespace BonoCorpAleman.TablaObject
             tabla = new Periodo[size];
             for (int i = 0; i < size; i++)
                 tabla[i] = new Periodo();
-            Debug.WriteLine(tabla[0]);
-            //tabla = new List<Periodo>(size);
         }
         private void PeriodoZero()
         {
             Debug.WriteLine("Calculo - PeriodoZero ejecutando " + size);
-            tabla[0].FechaProgramada = bono.FechaEmision.Date.ToString();
+            tabla[0].I = 0;
+            tabla[0].PlazoGracia = ' ';
+            tabla[0].FechaProgramada = bono.FechaEmision;
             tabla[0].FlujoEmisor = bono.ValorComercial - bono.CostesInicialesEmisor();
             tabla[0].FlujoEmisorEscudo = tabla[0].FlujoEmisor;
             tabla[0].FlujoBonista = (bono.ValorComercial*-1) - bono.CostesInicialesBonista();
@@ -38,6 +37,7 @@ namespace BonoCorpAleman.TablaObject
             Debug.WriteLine("Calculo - Entro a Cargar Datos");
             var IAS = bono.InflacionAnual();
             Debug.WriteLine("Calculo - Despues de IAS");
+            var TEAS = bono.TasaEfectivaAnual();
             var TEPS = bono.TasaEfectivaPeriodo();
             Debug.WriteLine("Calculo - Despues de TEPS");
             var PGS = bono.PlazoDeGracia();
@@ -48,12 +48,13 @@ namespace BonoCorpAleman.TablaObject
                 throw new Exception("No hay una Inflacion en el periodo 1");*/
             PeriodoZero();
             Debug.WriteLine("Calculo - despues de ejecutar perido zero");
-            double tep = TEPS[1];
+            double tep = TEPS[1], tea = TEAS[1];
             double ia = IAS[1];
             Debug.WriteLine("Calculo - Antes de for");
             for (int i = 1; i < size; i++)
             {
-                tabla[i].FechaProgramada = bono.getFechaByIndex(i).Date.ToString();
+                tabla[i].I = i;
+                tabla[i].FechaProgramada = bono.getFechaByIndex(i);
                 if (i > 1 && IAS.ContainsKey(i))
                 {
                     ia = IAS[i];
@@ -63,7 +64,7 @@ namespace BonoCorpAleman.TablaObject
                 {
                     tabla[i].InflacionAnual = ia;
                 }
-                tabla[i].InflacionPeriodo = Math.Pow(1 + tabla[i].InflacionAnual.Percent(), (double)bono.FrecCupon / (double)bono.DiasPorAnio) - 1;
+                tabla[i].InflacionPeriodo = (Math.Pow(1 + tabla[i].InflacionAnual.Percent(), (double)bono.FrecCupon / (double)bono.DiasPorAnio) - 1) * 100;
                 if (PGS.ContainsKey(i))
                 {
                     tabla[i].PlazoGracia = PGS[i];
@@ -77,10 +78,15 @@ namespace BonoCorpAleman.TablaObject
                 if (i > 1 && TEPS.ContainsKey(i))
                 {
                     tep = TEPS[i];
+                    tea = TEAS[i];
+                    tabla[i].TasaEfectivaAnual = tea;
+                    tabla[i].TasaEfectivaPeriodo = tep;
                     tabla[i].Cupon = (-1 * tabla[i].BonoIndexado) * tep.Percent();
                 }
                 else
                 {
+                    tabla[i].TasaEfectivaAnual = tea;
+                    tabla[i].TasaEfectivaPeriodo = tep;
                     tabla[i].Cupon = (-1 * tabla[i].BonoIndexado) * tep.Percent();
                 }
                 tabla[i].Amortizacion = (tabla[i].PlazoGracia == 'T' || tabla[i].PlazoGracia == 'P') ? 0 : (-1 * tabla[i].BonoIndexado) / (bono.NroTatalPeriodos() - i + 1);
@@ -96,9 +102,5 @@ namespace BonoCorpAleman.TablaObject
             }
         }
 
-        /*public void Dispose()
-        {
-            throw new NotImplementedException();
-        }*/
     }
 }

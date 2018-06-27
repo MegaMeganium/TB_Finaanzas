@@ -219,6 +219,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TablaObject\Calculo.cs" />
     <Compile Include="TablaObject\Periodo.cs" />
+    <Compile Include="TablaObject\XIRR.cs" />
     <Compile Include="ViewModels\Bono\AddEditBonoViewModel.cs" />
     <Compile Include="ViewModels\Bono\ListBonoViewModel.cs" />
     <Compile Include="ViewModels\Home\LoginViewModel.cs" />
@@ -263,6 +264,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MyScripts\IBonoMain.js" />
+    <Content Include="Scripts\MyScripts\RBonoMain.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />

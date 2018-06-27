@@ -134,7 +134,27 @@ namespace BonoCorpAleman.Helpers
         {
             return Tabla.Duracion() / (1 + Tabla.bono.COKperiodo().Percent());
         }
-
+        public static double TCEA_Emisor(this Calculo Tabla)
+        {
+            var listFlujoEmisor = Tabla.tabla.Select(X => X.FlujoEmisor).ToArray();
+            var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
+            XIRR tir_no_per = new XIRR();
+            return tir_no_per.Main(listFlujoEmisor, listFechaProgramada);
+        }
+        public static double TCEA_EmisorConEscudo(this Calculo Tabla)
+        {
+            var listFlujoEmisorEscudo = Tabla.tabla.Select(X => X.FlujoEmisorEscudo).ToArray();
+            var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
+            XIRR tir_no_per = new XIRR();
+            return tir_no_per.Main(listFlujoEmisorEscudo, listFechaProgramada);
+        }
+        public static double TREA_Bonista(this Calculo Tabla)
+        {
+            var listFlujoBonista = Tabla.tabla.Select(X => X.FlujoBonista).ToArray();
+            var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
+            XIRR tir_no_per = new XIRR();
+            return tir_no_per.Main(listFlujoBonista, listFechaProgramada);
+        }
         public static DateTime getFechaByIndex(this Models.Bono bono, int index)
         {
             return (index == 0) ? bono.FechaEmision : (bono.FechaEmision.AddDays(index * bono.FrecCupon));

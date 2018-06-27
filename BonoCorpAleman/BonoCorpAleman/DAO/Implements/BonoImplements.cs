@@ -42,10 +42,17 @@ namespace BonoCorpAleman.DAO.Implements
 
         public void Delete(long id)
         {
-            var obj = Find(id);
-            context.Bono.Attach(obj);
-            context.Bono.Remove(obj);
-            context.SaveChanges();
+            try
+            {
+                var obj = Find(id);
+                context.Bono.Attach(obj);
+                context.Bono.Remove(obj);
+                context.SaveChanges();
+            }catch(Exception ex)
+            {
+                Debug.WriteLine("delete Bono - " + ex.InnerException);
+                return;
+            }
         }
 
         public Bono Find(long id)

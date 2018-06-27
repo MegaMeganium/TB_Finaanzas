@@ -63,15 +63,18 @@ namespace BonoCorpAleman.Helpers
                     Periodo = model.LstPerInflaciones[i]
                 });
             }
-
-            for (var i = 0; i < model.LstPerPlazoBono.Count; i++){
-                bono.PlazoBono.Add(new PlazoBono
+            if(model.LstPlazosDeGraciaId.Count != 0)
+            {
+                for (var i = 0; i < model.LstPerPlazoBono.Count; i++)
                 {
-                    PlazoGracia_ID = model.LstPlazosDeGraciaId[i],
-                    Periodo = model.LstPerPlazoBono[i]
-                });
+                    bono.PlazoBono.Add(new PlazoBono
+                    {
+                        PlazoGracia_ID = model.LstPlazosDeGraciaId[i],
+                        Periodo = model.LstPerPlazoBono[i]
+                    });
+                }
             }
-
+            
             for (int i = 0; i < model.LstCostesGastosNombres.Count; i++)
             {
                 bono.Costes_Gastos.Add(new Costes_Gastos

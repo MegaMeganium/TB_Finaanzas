@@ -1,55 +1,96 @@
 ﻿@model BonoCorpAleman.TablaObject.Calculo
-
+@using BonoCorpAleman.Helpers
 @{
-    ViewBag.Title = "RBono";
+                 ViewBag.Title = "RBono";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/MyScripts/RBonoMain.js")"></script>
 }
 
 <h2>Resultados del Bono</h2>
 
-<table class="table">
-    <tr>
-        <th>N°</th>
-        <th>Fecha Programada</th>
-        <th>Inflacion Anual</th>
-        <th>Inflacion Periodo</th>
-        <th>Plazo de Gracia</th>
-        <th>Bono</th>
-        <th>Bono Indexado</th>
-        <th>Cupon</th>
-        <th>Cuota</th>
-        <th>Amort.</th>
-        <th>Prima</th>
-        <th>Escudo</th>
-        <th>Flujo Emisor</th>
-        <th>FE c/Escudo</th>
-        <th>Flujo Bonista</th>
-        <th>Flujo Act.</th>
-        <th>FA x Plazo</th>
-        <th>Factor p/Convexidad</th>
-    </tr>
+<hr />
 
-@for (int i = 0; i < Model.size; i++) {
-    <tr>
-        <td>@i</td>
-        <td>@Model.tabla[i].FechaProgramada</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].InflacionAnual, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].InflacionPeriodo, 2)</td>
-        <td>@Model.tabla[i].PlazoGracia</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Bono, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].BonoIndexado, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Cupon, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Cuota, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Amortizacion, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Prima, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].Escudo, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoEmisor, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoEmisorEscudo, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoBonista, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FlujoActivo, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FAxPlazo, 2)</td>
-        <td>@Decimal.Round((decimal)Model.tabla[i].FactorConvexidad, 2)</td>
-    </tr>
-}
+<h3>... del a estructuracion del Bono</h3>
+<h4>Frecuencia del Cupon: @Model.bono.FrecCupon</h4>
+<h4>Dias de Capitalizacion</h4>
+<h4>N° Periodos por Año: @Model.bono.NroPeriodosPorAnio()</h4>
+<h4>N° Total de Periodos: @Model.bono.NroTatalPeriodos()</h4>
+<h4>Tasa Efectiva Anual</h4>
+<h4>Tasa Efectiva Semestral</h4>
+<h4>COK Semestral: <label class="percent">@Model.bono.COKperiodo().RoundDec(3)</label></h4>
+<h4>Costes Inicales Emisor: @Model.bono.CostesInicialesEmisor().RoundDec()</h4>
+<h4>Costes Iniciales Bonista: @Model.bono.CostesInicialesBonista().RoundDec()</h4>
+<br />
+<h3>... del Precio Actual y Utilidad</h3>
+<h4>Precio Actual: <label class="util">@Model.PrecioActual().RoundDec()</label></h4>
+<h4>Utilidad / Perdida: <label class="util">@Model.UtilidadPerdida().RoundDec()</label></h4>
+<br />
+<h3>... Ratios de decision</h3>
+<h4>Duracion: @Model.Duracion().RoundDec()</h4>
+<h4>Convexidad: @Model.Convexidad().RoundDec()</h4>
+<h4>Total: @Model.Total().RoundDec()</h4>
+<h4>Duracion modificada: @Model.DuracionModificada().RoundDec()</h4>
+<br />
+<h3>... de los indicadores de Rentabilidad</h3>
+<h4>TCEA Emisor: <label class="percent">@Model.TCEA_Emisor().RoundDec(5)</label></h4>
+<h4>TCEA Emisor c/Escudo: <label class="percent">@Model.TCEA_EmisorConEscudo().RoundDec(5)</label></h4>
+<h4>TREA Bonista: <label class="percent">@Model.TREA_Bonista().RoundDec(5)</label></h4>
+<br />
+<br />
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">N°</th>
+            <th scope="col">Fecha Programada (dd/mm/aaaa)</th>
+            <th scope="col">Inflacion Anual</th>
+            <th scope="col">Inflacion Periodo</th>
+            <th scope="col">Tasa Efectiva Anual</th>
+            <th scope="col">Tasa Efectiva Periodo</th>
+            <th scope="col">Plazo de Gracia</th>
+            <th scope="col">Bono</th>
+            <th scope="col">Bono Indexado</th>
+            <th scope="col">Cupon</th>
+            <th scope="col">Cuota</th>
+            <th scope="col">Amort.</th>
+            <th scope="col">Prima</th>
+            <th scope="col">Escudo</th>
+            <th scope="col">Flujo Emisor</th>
+            <th scope="col">FE c/Escudo</th>
+            <th scope="col">Flujo Bonista</th>
+            <th scope="col">Flujo Act.</th>
+            <th scope="col">FA x Plazo</th>
+            <th scope="col">Factor p/Convexidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.size; i++)
+        {
+            <tr>
+                <th scope="row">@i</th>
+                <td>@Model.tabla[i].FechaProgramada.ToDate()</td>
+                <td><label class="percent">@Math.Round(Model.tabla[i].InflacionAnual, 2)</label></td>
+                <td><label class="percent">@Math.Round(Model.tabla[i].InflacionPeriodo, 2)</label></td>
+                <td><label class="percent">@Model.tabla[i].TasaEfectivaAnual.RoundDec(3)</label></td>
+                <td><label class="percent">@Model.tabla[i].TasaEfectivaPeriodo.RoundDec(3)</label></td>
+                <td>@Model.tabla[i].PlazoGracia</td>
+                <td>@Math.Round(Model.tabla[i].Bono, 2)</td>
+                <td>@Math.Round(Model.tabla[i].BonoIndexado, 2)</td>
+                <td>@Math.Round(Model.tabla[i].Cupon, 2)</td>
+                <td>@Math.Round(Model.tabla[i].Cuota, 2)</td>
+                <td>@Math.Round(Model.tabla[i].Amortizacion, 2)</td>
+                <td>@Math.Round(Model.tabla[i].Prima, 2)</td>
+                <td>@Math.Round(Model.tabla[i].Escudo, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FlujoEmisor, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FlujoEmisorEscudo, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FlujoBonista, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FlujoActivo, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FAxPlazo, 2)</td>
+                <td>@Math.Round(Model.tabla[i].FactorConvexidad, 2)</td>
+            </tr>
+        }
+    </tbody>
 
 </table>

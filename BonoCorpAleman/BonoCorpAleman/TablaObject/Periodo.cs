@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using BonoCorpAleman.Helpers;
 
 namespace BonoCorpAleman.TablaObject
 {
     public class Periodo
     {
-        public string FechaProgramada { get; set; } = "3/7/1998";
+        public int I { get; set; } = 0;
+        public double TasaEfectivaAnual { get; set; } = 0;
+        public double TasaEfectivaPeriodo { get; set; } = 0;
+        public DateTime FechaProgramada { get; set; } = DateTime.Now;
         public double InflacionAnual { get; set; } = 0;
         public double InflacionPeriodo { get; set; } = 0;
         public char PlazoGracia { get; set; } = 'S';
