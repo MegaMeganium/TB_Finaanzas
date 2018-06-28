@@ -71,24 +71,24 @@
             <tr>
                 <th scope="row">@i</th>
                 <td>@Model.tabla[i].FechaProgramada.ToDate()</td>
-                <td><label class="percent">@Math.Round(Model.tabla[i].InflacionAnual, 2)</label></td>
-                <td><label class="percent">@Math.Round(Model.tabla[i].InflacionPeriodo, 2)</label></td>
+                <td><label class="percent">@Model.tabla[i].InflacionAnual.RoundDec()</label></td>
+                <td><label class="percent">@Model.tabla[i].InflacionPeriodo.RoundDec()</label></td>
                 <td><label class="percent">@Model.tabla[i].TasaEfectivaAnual.RoundDec(3)</label></td>
                 <td><label class="percent">@Model.tabla[i].TasaEfectivaPeriodo.RoundDec(3)</label></td>
                 <td>@Model.tabla[i].PlazoGracia</td>
-                <td>@Math.Round(Model.tabla[i].Bono, 2)</td>
-                <td>@Math.Round(Model.tabla[i].BonoIndexado, 2)</td>
-                <td>@Math.Round(Model.tabla[i].Cupon, 2)</td>
-                <td>@Math.Round(Model.tabla[i].Cuota, 2)</td>
-                <td>@Math.Round(Model.tabla[i].Amortizacion, 2)</td>
-                <td>@Math.Round(Model.tabla[i].Prima, 2)</td>
-                <td>@Math.Round(Model.tabla[i].Escudo, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FlujoEmisor, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FlujoEmisorEscudo, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FlujoBonista, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FlujoActivo, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FAxPlazo, 2)</td>
-                <td>@Math.Round(Model.tabla[i].FactorConvexidad, 2)</td>
+                <td>@Model.tabla[i].Bono.RoundDec()</td>
+                <td>@Model.tabla[i].BonoIndexado.RoundDec()</td>
+                <td>@Model.tabla[i].Cupon.RoundDec()</td>
+                <td>@Model.tabla[i].Cuota.RoundDec()</td>
+                <td>@Model.tabla[i].Amortizacion.RoundDec()</td>
+                <td>@Model.tabla[i].Prima.RoundDec()</td>
+                <td>@Model.tabla[i].Escudo.RoundDec()</td>
+                <td>@Model.tabla[i].FlujoEmisor.RoundDec()</td>
+                <td>@Model.tabla[i].FlujoEmisorEscudo.RoundDec()</td>
+                <td>@Model.tabla[i].FlujoBonista.RoundDec()</td>
+                <td>@Model.tabla[i].FlujoActivo.RoundDec()</td>
+                <td>@Model.tabla[i].FAxPlazo.RoundDec()</td>
+                <td>@Model.tabla[i].FactorConvexidad.RoundDec()</td>
             </tr>
         }
     </tbody>

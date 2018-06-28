@@ -24,7 +24,6 @@ namespace BonoCorpAleman.Helpers
         }
         public static IDictionary<int, char> PlazoDeGracia(this Models.Bono bono)
         {
-            //IDictionary<int, char> list = new Dictionary<int, char>();
             var plazos = bono.PlazoBono.Select(x => new
             {
                 Plazo = (x.PlazoGracia.Nombre == "Total") ? 'T' : (x.PlazoGracia.Nombre == "Parcial") ? 'P' : 'S',
@@ -34,7 +33,6 @@ namespace BonoCorpAleman.Helpers
         }
         public static IDictionary<int, double> InflacionAnual(this Models.Bono bono)
         {
-            //IDictionary<int, double> list = new Dictionary<int, double>();
             var IA = bono.Inflacion.OrderBy(x=>x.Periodo).ToDictionary(x => x.Periodo, x => x.Valor);
             return IA;
         }
@@ -50,7 +48,7 @@ namespace BonoCorpAleman.Helpers
                     list.Add(tasa.NroCuota, tasa.TasaInteres);
                 }else
                 {
-                    var Conversion = Math.Pow(1 + tasa.TasaInteres.Percent() / (bono.DiasPorAnio / tasa.Capitalizacion1.ID), (bono.DiasPorAnio / tasa.Capitalizacion1.ID) - 1) * 100;//falta cap
+                    var Conversion = Math.Pow(1 + tasa.TasaInteres.Percent() / (bono.DiasPorAnio / tasa.Capitalizacion1.ID.CapVal()), (bono.DiasPorAnio / tasa.Capitalizacion1.ID) - 1) * 100;//falta cap
                     list.Add(tasa.NroCuota, Conversion);
                 }
             }
@@ -178,6 +176,30 @@ namespace BonoCorpAleman.Helpers
         public static double CAVALI(this Models.Bono bono)
         {
             return bono.Costes_Gastos.FirstOrDefault(x => x.Nombre == "CAVALI").Valor;
+        }
+        public static int CapVal(this object CapitalizacionId)
+        {
+            switch ((int)CapitalizacionId)
+            {
+                case 1:
+                    return 1;
+                case 2:
+                    return 15;
+                case 3:
+                    return 30;
+                case 4:
+                    return 60;
+                case 5:
+                    return 90;
+                case 6:
+                    return 120;
+                case 7:
+                    return 180;
+                case 8:
+                    return 360;
+                default:
+                    return -99;
+            }
         }
     }
 }

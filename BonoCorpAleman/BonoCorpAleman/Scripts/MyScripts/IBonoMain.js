@@ -1,8 +1,17 @@
 ﻿$(document).ready(function () {
+    /*$('.enPorcentaje').keyup(function () {
+        var newval = $(this).val().substring($(this).length - 1, $(this).length);
+        $(this).val(newval + "%");
+    });
+    $('.enPorcentaje').submit(function () {
+        var newNum = $(this).substring(0, $(this).length - 1);
+        newNum = parseFloat(newNum);
+        return newNum;
+    });*/
     function getoptionCapitalizacion(lst) {
         var str = "";
         lst.forEach(function (element, index) {
-            //Interpolacion de string //alt + 96 para comillas de iterpolacion
+            //Interpolacion de string //alt + 96 para comillas de interpolacion
             str += `<option value="${element.ID}">${element.Nombre}</option>`;
         });
         return str;
