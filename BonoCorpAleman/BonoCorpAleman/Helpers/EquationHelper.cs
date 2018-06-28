@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using Microsoft.VisualBasic;
 
 namespace BonoCorpAleman.Helpers
 {
@@ -136,22 +137,25 @@ namespace BonoCorpAleman.Helpers
         {
             var listFlujoEmisor = Tabla.tabla.Select(X => X.FlujoEmisor).ToArray();
             var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
-            XIRR tir_no_per = new XIRR();
-            return tir_no_per.Main(listFlujoEmisor, listFechaProgramada);
+
+            var IRR = Financial.IRR(ref listFlujoEmisor);
+            return (Math.Pow(IRR + 1, Tabla.bono.DiasPorAnio / Tabla.bono.FrecCupon) - 1) * 100;
         }
         public static double TCEA_EmisorConEscudo(this Calculo Tabla)
         {
             var listFlujoEmisorEscudo = Tabla.tabla.Select(X => X.FlujoEmisorEscudo).ToArray();
             var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
-            XIRR tir_no_per = new XIRR();
-            return tir_no_per.Main(listFlujoEmisorEscudo, listFechaProgramada);
+
+            var IRR = Financial.IRR(ref listFlujoEmisorEscudo);
+            return (Math.Pow(IRR + 1, Tabla.bono.DiasPorAnio / Tabla.bono.FrecCupon) - 1) * 100;
         }
         public static double TREA_Bonista(this Calculo Tabla)
         {
             var listFlujoBonista = Tabla.tabla.Select(X => X.FlujoBonista).ToArray();
             var listFechaProgramada = Tabla.tabla.Select(x => (double)x.FechaProgramada.Day).ToArray();
-            XIRR tir_no_per = new XIRR();
-            return tir_no_per.Main(listFlujoBonista, listFechaProgramada);
+
+            var IRR = Financial.IRR(ref listFlujoBonista);
+            return (Math.Pow(IRR + 1, Tabla.bono.DiasPorAnio / Tabla.bono.FrecCupon) - 1) * 100;
         }
         public static DateTime getFechaByIndex(this Models.Bono bono, int index)
         {
@@ -200,6 +204,58 @@ namespace BonoCorpAleman.Helpers
                 default:
                     return -99;
             }
+        }
+        public static double computeIRR(this double []cf, int numOfFlows)
+        {
+            int i = 0, j = 0;
+            double m = 0.0;
+            double old = 0.00;
+            double neww = 0.00;
+            double oldguessRate = 0.01;
+            double newguessRate = 0.01;
+            double guessRate = 0.01;
+            double lowGuessRate = 0.01;
+            double highGuessRate = 0.5;
+            double npv = 0.0;
+            double denom = 0.0;
+            for (i = 0; i < 1000; i++)
+            {
+                npv = 0.00;
+                for (j = 0; j < numOfFlows; j++)
+                {
+                    denom = Math.Pow((1 + guessRate), j);
+                    npv = npv + (cf[j] / denom);
+                }
+                /* Stop checking once the required precision is achieved */
+                if ((npv > 0) && (npv < 0.00000001))
+                    break;
+                if (old == 0)
+                    old = npv;
+                else
+                    old = neww;
+                neww = npv;
+                if (i > 0)
+                {
+                    if (old < neww)
+                    {
+                        if (old < 0 && neww < 0)
+                            highGuessRate = newguessRate;
+                        else
+                            lowGuessRate = newguessRate;
+                    }
+                    else
+                    {
+                        if (old > 0 && neww > 0)
+                            lowGuessRate = newguessRate;
+                        else
+                            highGuessRate = newguessRate;
+                    }
+                }
+                oldguessRate = guessRate;
+                guessRate = (lowGuessRate + highGuessRate) / 2;
+                newguessRate = guessRate;
+            }
+            return guessRate;
         }
     }
 }
